@@ -544,6 +544,85 @@ export default function SeasonModal({ season, onClose, db }) {
                   </div>
                 </div>
               )}
+
+              {/* Season 3 Rankings Section */}
+              {season.id === 's-3' && (
+                <div className="space-y-4 pt-6 border-t border-neutral-900 animate-text-reveal-anim">
+                  <h3 className="text-sm font-mono uppercase tracking-widest text-[#D4AF37] font-bold flex items-center gap-1.5">
+                    <BarChart2 size={14} className="text-[#D4AF37]" /> Season 3 Tournament Rankings
+                  </h3>
+                  
+                  <div className="p-4 bg-neutral-900/10 border border-neutral-900 rounded text-[11px] font-mono text-neutral-400 leading-relaxed space-y-1.5">
+                    <span className="font-bold text-white uppercase block">Ranking Rules & Logic:</span>
+                    <ul className="list-disc pl-4 space-y-1 text-neutral-450">
+                      <li><strong>1st–3rd:</strong> Official tournament knockout positions take precedence (MECH BETA and EC GAMMA shared 3rd place as there was no 3rd-place play-off).</li>
+                      <li><strong>5th–8th (Quarter-finalists) & 9th–13th (Group Exits):</strong> Ranked using group-stage stats only: Points Per Match (PPM) &gt; Goal Difference (GD) &gt; Goals Scored (GF) &gt; Alphabetical.</li>
+                      <li>PPM = Points ÷ Matches Played (used because groups had different numbers of teams).</li>
+                    </ul>
+                  </div>
+
+                  <div className="overflow-x-auto border border-neutral-900 rounded-lg bg-neutral-950">
+                    <table className="w-full border-collapse text-left text-sm text-neutral-200">
+                      <thead>
+                        <tr className="border-b border-neutral-900 bg-neutral-950/80 font-mono text-[10px] uppercase tracking-wider text-neutral-500">
+                          <th scope="col" className="px-6 py-3 font-normal text-center w-16">Pos</th>
+                          <th scope="col" className="px-6 py-3 font-normal">Team</th>
+                          <th scope="col" className="px-4 py-3 font-normal text-center">MP</th>
+                          <th scope="col" className="px-4 py-3 font-normal text-center">W</th>
+                          <th scope="col" className="px-4 py-3 font-normal text-center">D</th>
+                          <th scope="col" className="px-4 py-3 font-normal text-center">L</th>
+                          <th scope="col" className="px-4 py-3 font-normal text-center">GF</th>
+                          <th scope="col" className="px-4 py-3 font-normal text-center">GA</th>
+                          <th scope="col" className="px-4 py-3 font-normal text-center">GD</th>
+                          <th scope="col" className="px-4 py-3 font-normal text-center w-20">Pts</th>
+                          <th scope="col" className="px-6 py-3 font-normal text-center w-24 text-white">PPM</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-neutral-900/50">
+                        {[
+                          { rank: 1, teamId: "t-2", mp: 2, w: 1, d: 0, l: 1, gf: 6, ga: 1, gd: 5, pts: 3, ppm: 1.500, note: "Champion" },
+                          { rank: 2, teamId: "t-3", mp: 2, w: 2, d: 0, l: 0, gf: 5, ga: 2, gd: 3, pts: 6, ppm: 3.000, note: "Runner-up" },
+                          { rank: 3, teamId: "t-10", mp: 2, w: 2, d: 0, l: 0, gf: 4, ga: 0, gd: 4, pts: 6, ppm: 3.000, note: "Shared 3rd" },
+                          { rank: 3, teamId: "t-14", mp: 3, w: 2, d: 0, l: 1, gf: 8, ga: 5, gd: 3, pts: 6, ppm: 2.000, note: "Shared 3rd" },
+                          
+                          { rank: 5, teamId: "t-1", mp: 2, w: 2, d: 0, l: 0, gf: 6, ga: 1, gd: 5, pts: 6, ppm: 3.000, note: "QF Exit" },
+                          { rank: 6, teamId: "t-6", mp: 3, w: 2, d: 0, l: 1, gf: 7, ga: 4, gd: 3, pts: 6, ppm: 2.000, note: "QF Exit" },
+                          { rank: 7, teamId: "t-9", mp: 2, w: 1, d: 0, l: 1, gf: 2, ga: 2, gd: 0, pts: 3, ppm: 1.500, note: "QF Exit" },
+                          { rank: 8, teamId: "t-13", mp: 2, w: 1, d: 0, l: 1, gf: 1, ga: 1, gd: 0, pts: 3, ppm: 1.500, note: "QF Exit" },
+                          
+                          { rank: 9, teamId: "t-5", mp: 3, w: 2, d: 0, l: 1, gf: 7, ga: 4, gd: 3, pts: 6, ppm: 2.000, note: "Group Exit" },
+                          { rank: 10, teamId: "t-7", mp: 2, w: 0, d: 0, l: 2, gf: 5, ga: 9, gd: -4, pts: 0, ppm: 0.000, note: "Group Exit" },
+                          { rank: 11, teamId: "t-11", mp: 2, w: 0, d: 0, l: 2, gf: 0, ga: 4, gd: -4, pts: 0, ppm: 0.000, note: "Group Exit" },
+                          { rank: 12, teamId: "t-12", mp: 2, w: 0, d: 0, l: 2, gf: 0, ga: 5, gd: -5, pts: 0, ppm: 0.000, note: "Group Exit" },
+                          { rank: 13, teamId: "t-8", mp: 3, w: 0, d: 0, l: 3, gf: 1, ga: 10, gd: -9, pts: 0, ppm: 0.000, note: "Group Exit" }
+                        ].map((row) => {
+                          const team = teamsMap[row.teamId];
+                          return (
+                            <tr key={row.teamId} className="hover:bg-neutral-900/20 transition-colors">
+                              <td className="px-6 py-3.5 text-center text-neutral-500 font-mono font-medium">{row.rank}</td>
+                              <td className="px-6 py-3.5 font-medium text-white flex items-center gap-2">
+                                {renderTeamBadge(team)}
+                                <span>{team?.name} <span className="text-[10px] text-neutral-500">({team?.shortName})</span></span>
+                              </td>
+                              <td className="px-4 py-3.5 text-center font-mono">{row.mp}</td>
+                              <td className="px-4 py-3.5 text-center font-mono">{row.w}</td>
+                              <td className="px-4 py-3.5 text-center font-mono">{row.d}</td>
+                              <td className="px-4 py-3.5 text-center font-mono">{row.l}</td>
+                              <td className="px-4 py-3.5 text-center font-mono text-neutral-300">{row.gf}</td>
+                              <td className="px-4 py-3.5 text-center font-mono text-neutral-500">{row.ga}</td>
+                              <td className={`px-4 py-3.5 text-center font-mono ${row.gd > 0 ? 'text-white' : row.gd < 0 ? 'text-neutral-500' : 'text-neutral-400'}`}>
+                                {row.gd > 0 ? `+${row.gd}` : row.gd}
+                              </td>
+                              <td className="px-4 py-3.5 text-center font-mono font-bold text-neutral-200">{row.pts}</td>
+                              <td className="px-6 py-3.5 text-center font-mono font-extrabold text-[#D4AF37]">{row.ppm.toFixed(3)}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
