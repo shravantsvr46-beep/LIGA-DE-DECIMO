@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Trophy, ArrowRight, Shield, RefreshCw, Layers, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import OverallTournamentRankings from '../components/OverallTournamentRankings';
+import TeamStatsModal from '../components/TeamStatsModal';
 
 function Instagram({ size = 24, className = '' }) {
   return (
@@ -66,6 +67,7 @@ export default function HomePage() {
   const [error, setError] = useState(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState(null);
 
   const getTeamForm = (teamId) => {
     if (!db || !db.matches) return [];
@@ -365,9 +367,10 @@ export default function HomePage() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {db.teams.map((team) => (
-            <div
+            <button
               key={team.id}
-              className="group flex flex-col items-center justify-center p-6 bg-neutral-900/10 hover:bg-neutral-900/30 border border-neutral-900 hover:border-neutral-800 rounded-lg transition-all duration-300"
+              onClick={() => setSelectedTeam(team)}
+              className="group flex flex-col items-center justify-center p-6 bg-neutral-900/10 hover:bg-neutral-900/30 border border-neutral-900 hover:border-neutral-800 rounded-lg transition-all duration-300 w-full text-center focus:outline-none"
             >
               {/* Badge */}
               <div className="relative w-16 h-16 rounded-full border border-neutral-800 flex items-center justify-center overflow-hidden bg-gradient-to-br from-neutral-900 to-neutral-950 shadow-lg group-hover:scale-105 transition-transform duration-300">
@@ -387,7 +390,7 @@ export default function HomePage() {
               <h4 className="mt-4 text-sm font-semibold tracking-tight text-white text-center">
                 {team.name}
               </h4>
-            </div>
+            </button>
           ))}
         </div>
       </section>
@@ -516,6 +519,15 @@ export default function HomePage() {
           <span>DARK MINIMALIST V1.0</span>
         </div>
       </footer>
+
+      {/* Team Stats Detail Modal */}
+      {selectedTeam && (
+        <TeamStatsModal 
+          team={selectedTeam} 
+          db={db} 
+          onClose={() => setSelectedTeam(null)} 
+        />
+      )}
 
     </div>
   );
