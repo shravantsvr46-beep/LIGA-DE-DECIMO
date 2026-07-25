@@ -357,9 +357,6 @@ export default function HomePage() {
               <h4 className="mt-4 text-sm font-semibold tracking-tight text-white text-center">
                 {team.name}
               </h4>
-              <span className="mt-1 text-[10px] font-mono uppercase tracking-widest text-neutral-500">
-                {team.shortName}
-              </span>
             </div>
           ))}
         </div>
