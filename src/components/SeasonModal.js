@@ -22,8 +22,8 @@ export default function SeasonModal({ season, onClose, db }) {
     's-3': [
       { pos: '1st', teamId: 't-2', label: 'Champion', color: 'bg-white text-black font-bold border-white' },
       { pos: '2nd', teamId: 't-3', label: 'Runner-up', color: 'bg-neutral-800 text-neutral-200 border-neutral-700' },
-      { pos: '3rd', teamId: 't-10', label: 'Third Place', color: 'bg-neutral-900 text-neutral-400 border-neutral-800' },
-      { pos: '4th', teamId: 't-14', label: 'Fourth Place', color: 'bg-neutral-950 text-neutral-500 border-neutral-900' }
+      { pos: '3rd', teamId: 't-10', label: 'Third Place (Shared)', color: 'bg-neutral-900 text-neutral-400 border-neutral-800' },
+      { pos: '3rd', teamId: 't-14', label: 'Third Place (Shared)', color: 'bg-neutral-900 text-neutral-400 border-neutral-800' }
     ]
   };
 
