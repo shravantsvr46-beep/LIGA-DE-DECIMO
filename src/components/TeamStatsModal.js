@@ -86,7 +86,7 @@ export default function TeamStatsModal({ team, db, onClose }) {
       const scorerList = m.scorers?.[team.id] || [];
       scorerList.forEach(name => {
         const cleanName = name.trim().toUpperCase();
-        if (cleanName) {
+        if (cleanName && cleanName !== 'OG' && !cleanName.includes('OWN GOAL')) {
           scorersDict[cleanName] = (scorersDict[cleanName] || 0) + 1;
         }
       });
