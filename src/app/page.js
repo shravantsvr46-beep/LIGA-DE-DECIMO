@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Trophy, ArrowRight, Shield, RefreshCw, Layers, ChevronLeft, ChevronRight } from 'lucide-react';
-import SeasonModal from '../components/SeasonModal';
+import Link from 'next/link';
 
 const HIGHLIGHTS = [
   {
@@ -42,7 +42,6 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [loadingState, setLoadingState] = useState('init');
   const [error, setError] = useState(null);
-  const [selectedSeason, setSelectedSeason] = useState(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -121,12 +120,11 @@ export default function HomePage() {
 
   // Auto-slide carousel
   useEffect(() => {
-    if (selectedSeason) return; // Pause auto-slide if modal is open to save CPU and prevent stutter
     const timer = setInterval(() => {
       setCarouselIndex((prev) => (prev + 1) % HIGHLIGHTS.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [carouselIndex, selectedSeason]);
+  }, [carouselIndex]);
 
   if (loading) {
     return (
@@ -377,9 +375,9 @@ export default function HomePage() {
             const runnerUp = getSeasonRunnerUp(season.id);
 
             return (
-              <div
+              <Link
                 key={season.id}
-                onClick={() => setSelectedSeason(season)}
+                href={`/season/${season.id}`}
                 className={`group relative flex flex-col md:flex-row md:items-center justify-between p-8 bg-neutral-950/40 border ${
                   isUpcoming 
                     ? 'border-neutral-800 hover:border-neutral-700 bg-neutral-900/5' 
@@ -454,7 +452,7 @@ export default function HomePage() {
                   )}
                 </div>
 
-              </div>
+              </Link>
             );
           })}
         </div>
@@ -553,14 +551,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Season Modal Portal */}
-      {selectedSeason && (
-        <SeasonModal
-          season={selectedSeason}
-          db={db}
-          onClose={() => setSelectedSeason(null)}
-        />
-      )}
+
 
       {/* Bottom Footer Info */}
       <footer className="relative z-10 max-w-7xl mx-auto px-6 mt-36 border-t border-neutral-900 pt-8 flex flex-col md:flex-row items-center justify-between text-neutral-500 text-xs font-mono gap-4">
