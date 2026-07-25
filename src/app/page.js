@@ -5,6 +5,27 @@ import { Trophy, ArrowRight, Shield, RefreshCw, Layers, ChevronLeft, ChevronRigh
 import Link from 'next/link';
 import OverallTournamentRankings from '../components/OverallTournamentRankings';
 
+function Instagram({ size = 24, className = '' }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
+
 const HIGHLIGHTS = [
   {
     url: '/photos/1.jpg',
@@ -196,7 +217,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 sm:gap-6">
           <button 
             onClick={() => fetchDb(true)} 
             className="flex items-center gap-1.5 text-xs font-mono tracking-wider text-neutral-400 hover:text-white transition-colors duration-200"
@@ -205,6 +226,16 @@ export default function HomePage() {
             <RefreshCw size={12} className={isRefreshing ? 'animate-spin' : ''} />
             {isRefreshing ? 'REFRESHING...' : 'LIVE'}
           </button>
+
+          <a 
+            href="https://www.instagram.com/liga.de.decimo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-2 border border-neutral-800 hover:border-white font-mono text-[11px] uppercase tracking-widest text-neutral-300 hover:text-white bg-neutral-950/60 rounded transition-all duration-300"
+          >
+            <Instagram size={13} className="text-pink-500" />
+            <span className="hidden sm:inline">Instagram</span>
+          </a>
           
           <a 
             href="/admin" 
@@ -469,7 +500,17 @@ export default function HomePage() {
         <div>
           &copy; {new Date().getFullYear()} <span className="text-[#D4AF37]">LIGA DE DÉCIMO</span>. All branch details reserved.
         </div>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4 flex-wrap justify-center md:justify-end">
+          <a 
+            href="https://www.instagram.com/liga.de.decimo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 hover:text-white transition-colors duration-200"
+          >
+            <Instagram size={12} className="text-pink-500" />
+            INSTAGRAM
+          </a>
+          <span>&middot;</span>
           <a href="/admin" className="hover:text-white transition-colors duration-200">ADMIN SECURE ACCESS</a>
           <span>&middot;</span>
           <span>DARK MINIMALIST V1.0</span>

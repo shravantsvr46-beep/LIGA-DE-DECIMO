@@ -4,6 +4,27 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Calendar, Trophy, BarChart2 } from 'lucide-react';
 
+function Instagram({ size = 24, className = '' }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
+
 const PLACEMENTS = {
   's-1': [
     { pos: '1st', teamId: 't-3',  label: 'Champion',             color: 'bg-white text-black font-bold border-white' },
@@ -478,7 +499,19 @@ export default function SeasonPage() {
 
       <footer className="max-w-5xl mx-auto px-4 sm:px-6 mt-20 border-t border-neutral-900 pt-8 pb-12 flex flex-col sm:flex-row items-center justify-between text-neutral-500 text-xs font-mono gap-4">
         <div>© {new Date().getFullYear()} <span className="text-[#D4AF37]">LIGA DE DECIMO</span>. All branch details reserved.</div>
-        <button onClick={() => router.push('/')} className="hover:text-white transition-colors duration-200">Back to Home</button>
+        <div className="flex items-center gap-4 flex-wrap">
+          <a 
+            href="https://www.instagram.com/liga.de.decimo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 hover:text-white transition-colors duration-200"
+          >
+            <Instagram size={12} className="text-pink-500" />
+            INSTAGRAM
+          </a>
+          <span>&middot;</span>
+          <button onClick={() => router.push('/')} className="hover:text-white transition-colors duration-200">Back to Home</button>
+        </div>
       </footer>
     </div>
   );
