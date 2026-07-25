@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Trophy, ArrowRight, Shield, RefreshCw, Layers, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import OverallTournamentRankings from '../components/OverallTournamentRankings';
 
 const HIGHLIGHTS = [
   {
@@ -458,98 +459,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* All-Time Rankings Section */}
-      <section className="relative z-10 max-w-2xl mx-auto px-6 mt-32">
-        <div className="border-b border-neutral-900 pb-6 mb-12 text-center">
-          <span className="text-xs font-mono uppercase tracking-widest text-neutral-500">Hall of Fame</span>
-          <h3 className="text-2xl font-bold tracking-tight text-white mt-1">All-Time League Rankings</h3>
-          <p className="text-xs text-neutral-500 font-mono mt-1">Historical standings ranking branches across Seasons 1 to 4</p>
-        </div>
-
-        <div className="space-y-3">
-          {db.allTimeRankings.map((row, idx) => {
-            const team = db.teams.find(t => t.id === row.teamId);
-            const rank = idx + 1;
-            
-            const rankStyles = 
-              rank === 1 ? 'bg-white text-black font-bold border-white' :
-              rank === 2 ? 'bg-neutral-800 text-neutral-200 border-neutral-700' :
-              rank === 3 ? 'bg-neutral-900 text-neutral-400 border-neutral-800' :
-              'text-neutral-500 border-neutral-900/60 bg-neutral-950/20';
-
-            const form = getTeamForm(row.teamId);
-
-            return (
-              <div 
-                key={`at-${row.teamId}`}
-                className="flex items-center justify-between p-4 bg-neutral-900/10 border border-neutral-900/80 rounded-lg hover:border-neutral-800 transition-colors duration-200 animate-text-reveal-anim"
-              >
-                <div className="flex items-center gap-4">
-                  <span className={`w-8 h-8 rounded-full border flex items-center justify-center font-mono text-xs ${rankStyles}`}>
-                    #{rank}
-                  </span>
-                  <div className="flex items-center gap-3">
-                    {team?.logo ? (
-                      <img 
-                        src={team.logo} 
-                        alt={team.shortName} 
-                        className="w-7 h-7 rounded-full object-cover border border-neutral-800"
-                      />
-                    ) : (
-                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-neutral-800 to-neutral-900 border border-neutral-700 flex items-center justify-center font-bold text-neutral-250 tracking-wider text-xs">
-                        {team?.shortName.slice(0, 2) || '??'}
-                      </div>
-                    )}
-                    <span className="font-semibold text-white tracking-tight text-sm sm:text-base">{row.name}</span>
-                  </div>
-                </div>
-                
-                {/* Last Five Match Stats (Form Trend) */}
-                <div className="flex items-center gap-1.5">
-                  {form.length === 0 ? (
-                    <span className="text-[10px] font-mono text-neutral-600 tracking-wider uppercase">—</span>
-                  ) : (
-                    form.map((outcome, fIdx) => {
-                      if (outcome === 'W') {
-                        return (
-                          <span 
-                            key={fIdx} 
-                            className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold"
-                            title="Win"
-                          >
-                            ✓
-                          </span>
-                        );
-                      }
-                      if (outcome === 'L') {
-                        return (
-                          <span 
-                            key={fIdx} 
-                            className="w-5 h-5 rounded-full bg-neutral-850 border border-neutral-800 text-neutral-500 flex items-center justify-center text-[10px] font-bold"
-                            title="Loss"
-                          >
-                            ✕
-                          </span>
-                        );
-                      }
-                      // Draw (outcome === 'D')
-                      return (
-                        <span 
-                          key={fIdx} 
-                          className="w-5 h-5 rounded-full bg-neutral-900 border border-neutral-855 text-neutral-400 flex items-center justify-center text-[10px] font-bold"
-                          title="Draw"
-                        >
-                          —
-                        </span>
-                      );
-                    })
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+      {/* Overall Tournament Rankings Section */}
+      <OverallTournamentRankings db={db} />
 
 
 
