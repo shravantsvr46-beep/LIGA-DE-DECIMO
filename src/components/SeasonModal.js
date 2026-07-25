@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { X, Calendar, Trophy, BarChart2 } from 'lucide-react';
 
 export default function SeasonModal({ season, onClose, db }) {
-  const [activeTab, setActiveTab] = useState('fixtures'); // 'fixtures' | 'table' | 'allTime'
+  const [activeTab, setActiveTab] = useState(season?.status === 'upcoming' ? 'table' : 'fixtures'); // 'fixtures' | 'table' | 'allTime'
 
   const formatScorers = (scorerList) => {
     if (!scorerList || scorerList.length === 0) return '';
@@ -90,7 +90,7 @@ export default function SeasonModal({ season, onClose, db }) {
         </div>
 
         {/* Tab Navigation */}
-        {season.id !== 's-1' && (
+        {season.id !== 's-1' && season.status !== 'upcoming' && (
           <div className="flex border-b border-neutral-900 bg-neutral-950/50 w-full">
             <button
               onClick={() => setActiveTab('fixtures')}
@@ -342,7 +342,7 @@ export default function SeasonModal({ season, onClose, db }) {
             <div className="space-y-10">
               
               {/* Group Toppers Showcase */}
-              {standings && Object.keys(standings).length > 0 && (
+              {season.status !== 'upcoming' && standings && Object.keys(standings).length > 0 && (
                 <div className="bg-neutral-900/10 border border-neutral-900 p-5 rounded-lg space-y-3 animate-text-reveal-anim">
                   <span className="text-[10px] font-mono uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5 font-bold">
                     <Trophy size={12} className="text-[#D4AF37]" /> Group Toppers (Leaders)
