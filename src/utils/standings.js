@@ -41,8 +41,8 @@ export function calculateStandings(matches, teams, seasonId = null, staticStandi
   // Otherwise, if we are calculating All-Time standings (seasonId = null), 
   // we need to aggregate BOTH matches and static standings from archive seasons.
   const targetMatches = seasonId 
-    ? matches.filter(m => m.seasonId === seasonId && m.status === 'completed')
-    : matches.filter(m => m.status === 'completed');
+    ? matches.filter(m => m.seasonId === seasonId && m.status === 'completed' && m.stage === 'Group Stage')
+    : matches.filter(m => m.status === 'completed' && m.stage === 'Group Stage');
 
   // Process match results
   targetMatches.forEach(m => {
