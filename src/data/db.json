@@ -1377,7 +1377,7 @@
     {
       "id": "m-4",
       "seasonId": "s-4",
-      "team1Id": "t-7",
+      "team1Id": "t-5",
       "team2Id": "t-11",
       "score1": 0,
       "score2": 0,
@@ -1548,6 +1548,19 @@
       "seasonId": "s-4",
       "team1Id": "t-8",
       "team2Id": "t-12",
+      "score1": 0,
+      "score2": 0,
+      "status": "upcoming",
+      "stage": "Group Stage",
+      "date": "2026-day5",
+      "time": "00:00",
+      "scorers": {}
+    },
+    {
+      "id": "m-18",
+      "seasonId": "s-4",
+      "team1Id": "t-3",
+      "team2Id": "t-14",
       "score1": 0,
       "score2": 0,
       "status": "upcoming",
