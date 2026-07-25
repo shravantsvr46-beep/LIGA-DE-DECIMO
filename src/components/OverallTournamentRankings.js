@@ -27,8 +27,7 @@ const PLACEMENTS = {
 const COLS = [
   { key: 'rank', label: 'Rank', title: 'Rank', numeric: true },
   { key: 'name', label: 'Team', title: 'Team', numeric: false },
-  { key: 'seasons', label: 'Seasons', title: 'Seasons played', numeric: true },
-  { key: 'bestFinishLabel', label: 'Best Finish', title: 'Best Tournament Finish', numeric: false },
+
   { key: 'titles', label: '🏆 Titles', title: 'Champions', numeric: true },
   { key: 'ru', label: '🥈 Runner-up', title: 'Runner-up finishes', numeric: true },
   { key: 'third', label: '🥉 Third', title: 'Third-place finishes', numeric: true },
@@ -434,21 +433,7 @@ export default function OverallTournamentRankings({ db }) {
                       </div>
                     </td>
 
-                    {/* Seasons played (pill list) */}
-                    <td className="px-3 py-3.5 text-center">
-                      <div className="flex items-center justify-center gap-1">
-                        {row.seasons.map(s => (
-                          <span key={s} className="px-1.5 py-0.5 bg-neutral-900/60 border border-neutral-850 text-neutral-450 rounded text-[9px] font-mono font-bold">
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
 
-                    {/* Best Finish Badge */}
-                    <td className="px-3 py-3.5 text-center">
-                      <TierBadge tier={row.tier} bestFinishLabel={row.bestFinishLabel} />
-                    </td>
 
                     {/* Placements counts */}
                     <td className="px-3 py-3.5 text-center font-mono font-semibold">
