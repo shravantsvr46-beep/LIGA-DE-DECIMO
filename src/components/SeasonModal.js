@@ -6,6 +6,27 @@ import { X, Calendar, Trophy, BarChart2 } from 'lucide-react';
 export default function SeasonModal({ season, onClose, db }) {
   const [activeTab, setActiveTab] = useState(season?.status === 'upcoming' ? 'table' : 'fixtures'); // 'fixtures' | 'table' | 'allTime'
 
+  const placementsConfig = {
+    's-1': [
+      { pos: '1st', teamId: 't-3', label: 'Champion', color: 'bg-white text-black font-bold border-white' },
+      { pos: '2nd', teamId: 't-2', label: 'Runner-up', color: 'bg-neutral-800 text-neutral-200 border-neutral-700' },
+      { pos: '3rd', teamId: 't-10', label: 'Third Place', color: 'bg-neutral-900 text-neutral-400 border-neutral-800' },
+      { pos: '4th', teamId: 't-9', label: 'Fourth Place', color: 'bg-neutral-950 text-neutral-500 border-neutral-900' }
+    ],
+    's-2': [
+      { pos: '1st', teamId: 't-3', label: 'Champion', color: 'bg-white text-black font-bold border-white' },
+      { pos: '2nd', teamId: 't-10', label: 'Runner-up', color: 'bg-neutral-800 text-neutral-200 border-neutral-700' },
+      { pos: '3rd', teamId: 't-9', label: 'Third Place', color: 'bg-neutral-900 text-neutral-400 border-neutral-800' },
+      { pos: '4th', teamId: 't-14', label: 'Fourth Place', color: 'bg-neutral-950 text-neutral-500 border-neutral-900' }
+    ],
+    's-3': [
+      { pos: '1st', teamId: 't-2', label: 'Champion', color: 'bg-white text-black font-bold border-white' },
+      { pos: '2nd', teamId: 't-3', label: 'Runner-up', color: 'bg-neutral-800 text-neutral-200 border-neutral-700' },
+      { pos: '3rd', teamId: 't-10', label: 'Third Place', color: 'bg-neutral-900 text-neutral-400 border-neutral-800' },
+      { pos: '4th', teamId: 't-14', label: 'Fourth Place', color: 'bg-neutral-950 text-neutral-500 border-neutral-900' }
+    ]
+  };
+
   const formatScorers = (scorerList) => {
     if (!scorerList || scorerList.length === 0) return '';
     const filteredList = scorerList.filter(name => name.toUpperCase() !== 'OG');
@@ -121,89 +142,35 @@ export default function SeasonModal({ season, onClose, db }) {
         {/* Modal Scroll Content */}
         <div className="flex-1 p-6 overflow-y-auto bg-neutral-950 space-y-6">
           
-          {/* Champions & Top Scorer Header Card (if defined) */}
-          {(season.championId || season.topScorer) && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-text-reveal-anim">
-              
-              {/* Champion Card */}
-              {season.championId && (() => {
-                const champTeam = teamsMap[season.championId];
-                return (
-                  <div className="bg-neutral-900/10 border border-neutral-900 p-4 rounded-lg flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded bg-white/5 border border-neutral-800 flex items-center justify-center text-amber-500">
-                        <Trophy size={18} className="stroke-[1.5]" />
-                      </div>
-                      <div>
-                        <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">Season Champion</span>
-                        <h4 className="text-sm font-bold text-white mt-0.5">{champTeam?.name || 'Unknown'}</h4>
-                      </div>
-                    </div>
-                    {champTeam?.logo && (
-                      <img 
-                        src={champTeam.logo} 
-                        alt={champTeam.shortName} 
-                        className="w-8 h-8 rounded-full object-cover border border-neutral-800"
-                      />
-                    )}
-                  </div>
-                );
-              })()}
-
-              {/* Top Scorer Card */}
-              {season.topScorer && (
-                <div className="bg-neutral-900/10 border border-neutral-900 p-4 rounded-lg flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded bg-white/5 border border-neutral-800 flex items-center justify-center text-amber-500">
-                      <Trophy size={18} className="stroke-[1.5]" />
-                    </div>
-                    <div>
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">Season Top Scorer</span>
-                      <h4 className="text-sm font-bold text-white mt-0.5">{season.topScorer.name}</h4>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">{season.topScorer.teamName}</span>
-                    <p className="text-sm font-bold text-white mt-0.5">{season.topScorer.goals} Goals</p>
-                  </div>
-                </div>
-              )}
-
-            </div>
-          )}
-
-          {/* Season 1 Special Winners View */}
-          {season.id === 's-1' && (
-            <div className="flex flex-col items-center justify-center py-12 max-w-md mx-auto space-y-8 animate-text-reveal-anim">
-              <div className="text-center space-y-2">
-                <Trophy className="w-12 h-12 text-white mx-auto mb-2" />
-                <h3 className="text-xl font-bold tracking-tight text-white uppercase font-mono">Season 1 Placements</h3>
-                <p className="text-xs text-neutral-500 font-mono">Official historical standings archive</p>
+          {/* Season Placements View */}
+          {placementsConfig[season.id] && (
+            <div className={`flex flex-col items-center justify-center py-4 max-w-md mx-auto space-y-6 animate-text-reveal-anim ${
+              season.id !== 's-1' ? 'border-b border-neutral-900 pb-6 mb-2' : ''
+            }`}>
+              <div className="text-center space-y-1">
+                <Trophy className="w-10 h-10 text-white mx-auto mb-1" />
+                <h3 className="text-lg font-bold tracking-tight text-white uppercase font-mono">Tournament Placements</h3>
+                <p className="text-[10px] text-neutral-500 font-mono">Official placements archive</p>
               </div>
 
-              <div className="w-full space-y-4">
-                {[
-                  { pos: '1st', teamId: 't-3', label: 'Champion', color: 'bg-white text-black font-bold border-white' },
-                  { pos: '2nd', teamId: 't-2', label: 'Runner-up', color: 'bg-neutral-800 text-neutral-200 border-neutral-700' },
-                  { pos: '3rd', teamId: 't-10', label: 'Third Place', color: 'bg-neutral-900 text-neutral-400 border-neutral-800' },
-                  { pos: '4th', teamId: 't-9', label: 'Fourth Place', color: 'bg-neutral-950 text-neutral-500 border-neutral-900' }
-                ].map((place) => {
+              <div className="w-full space-y-3">
+                {placementsConfig[season.id].map((place) => {
                   const team = teamsMap[place.teamId];
                   return (
                     <div 
                       key={place.pos}
-                      className="flex items-center justify-between p-4 bg-neutral-900/30 border border-neutral-900 rounded-lg hover:border-neutral-800 transition-colors"
+                      className="flex items-center justify-between p-3.5 bg-neutral-900/20 border border-neutral-900 rounded hover:border-neutral-800 transition-colors"
                     >
-                      <div className="flex items-center gap-4">
-                        <span className={`w-8 h-8 rounded-full border flex items-center justify-center font-mono text-xs ${place.color}`}>
+                      <div className="flex items-center gap-3">
+                        <span className={`w-7 h-7 rounded-full border flex items-center justify-center font-mono text-[10px] ${place.color}`}>
                           {place.pos}
                         </span>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2.5">
                           {renderTeamBadge(team)}
-                          <span className="font-semibold text-white tracking-tight">{team?.name || 'Unknown'}</span>
+                          <span className="font-semibold text-white text-xs tracking-tight">{team?.name || 'Unknown'}</span>
                         </div>
                       </div>
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 bg-neutral-900 px-2 py-0.5 rounded">
+                      <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 bg-neutral-900 px-2 py-0.5 rounded">
                         {place.label}
                       </span>
                     </div>
@@ -213,9 +180,61 @@ export default function SeasonModal({ season, onClose, db }) {
             </div>
           )}
 
+
+
           {/* Tab 1: Fixtures & Results */}
           {season.id !== 's-1' && activeTab === 'fixtures' && (
             <div className="space-y-6">
+
+              {/* Champions & Top Scorer Header Card (if defined) */}
+              {(season.championId || season.topScorer) && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-text-reveal-anim">
+                  
+                  {/* Champion Card */}
+                  {season.championId && (() => {
+                    const champTeam = teamsMap[season.championId];
+                    return (
+                      <div className="bg-neutral-900/10 border border-neutral-900 p-4 rounded-lg flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded bg-white/5 border border-neutral-800 flex items-center justify-center text-amber-500">
+                            <Trophy size={18} className="stroke-[1.5]" />
+                          </div>
+                          <div>
+                            <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">Season Champion</span>
+                            <h4 className="text-sm font-bold text-white mt-0.5">{champTeam?.name || 'Unknown'}</h4>
+                          </div>
+                        </div>
+                        {champTeam?.logo && (
+                          <img 
+                            src={champTeam.logo} 
+                            alt={champTeam.shortName} 
+                            className="w-8 h-8 rounded-full object-cover border border-neutral-800"
+                          />
+                        )}
+                      </div>
+                    );
+                  })()}
+
+                  {/* Top Scorer Card */}
+                  {season.topScorer && (
+                    <div className="bg-neutral-900/10 border border-neutral-900 p-4 rounded-lg flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded bg-white/5 border border-neutral-800 flex items-center justify-center text-amber-500">
+                          <Trophy size={18} className="stroke-[1.5]" />
+                        </div>
+                        <div>
+                          <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">Season Top Scorer</span>
+                          <h4 className="text-sm font-bold text-white mt-0.5">{season.topScorer.name}</h4>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">{season.topScorer.teamName}</span>
+                        <p className="text-sm font-bold text-white mt-0.5">{season.topScorer.goals} Goals</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
               {sortedMatches.length === 0 ? (
                 <div className="text-center py-12 text-neutral-500 font-mono text-sm">
                   No fixtures generated for this season yet.
