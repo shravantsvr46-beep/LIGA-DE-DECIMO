@@ -1,0 +1,1388 @@
+{
+  "teams": [
+    {
+      "id": "t-1",
+      "name": "AI & DS",
+      "shortName": "AI & DS",
+      "logo": "/logos/teams/AI & DS.png",
+      "group": "Group A"
+    },
+    {
+      "id": "t-2",
+      "name": "APPLIED",
+      "shortName": "APPLIED",
+      "logo": "/logos/teams/APPLIED.png",
+      "group": "Group A"
+    },
+    {
+      "id": "t-3",
+      "name": "CIVIL",
+      "shortName": "CIVIL",
+      "logo": "/logos/teams/CIVIL.png",
+      "group": "Group A"
+    },
+    {
+      "id": "t-4",
+      "name": "CS ALPHA",
+      "shortName": "CS ALPHA",
+      "logo": "/logos/teams/CS ALPHA.png",
+      "group": "Group A"
+    },
+    {
+      "id": "t-5",
+      "name": "CS BETA",
+      "shortName": "CS BETA",
+      "logo": "/logos/teams/CS BETA.png",
+      "group": "Group A"
+    },
+    {
+      "id": "t-6",
+      "name": "CS GAMMA",
+      "shortName": "CS GAMMA",
+      "logo": "/logos/teams/CS GAMMA.png",
+      "group": "Group A"
+    },
+    {
+      "id": "t-7",
+      "name": "CSBS",
+      "shortName": "CSBS",
+      "logo": "/logos/teams/CSBS.png",
+      "group": "Group A"
+    },
+    {
+      "id": "t-8",
+      "name": "EC ALPHA",
+      "shortName": "EC ALPHA",
+      "logo": "/logos/teams/EC ALPHA.png",
+      "group": "Group B"
+    },
+    {
+      "id": "t-9",
+      "name": "EC BETA",
+      "shortName": "EC BETA",
+      "logo": "/logos/teams/EC BETA.png",
+      "group": "Group B"
+    },
+    {
+      "id": "t-10",
+      "name": "EC GAMMA",
+      "shortName": "EC GAMMA",
+      "logo": "/logos/teams/EC GAMMA.png",
+      "group": "Group B"
+    },
+    {
+      "id": "t-11",
+      "name": "EEE",
+      "shortName": "EEE",
+      "logo": "/logos/teams/EEE.png",
+      "group": "Group B"
+    },
+    {
+      "id": "t-12",
+      "name": "IT",
+      "shortName": "IT",
+      "logo": "/logos/teams/IT.png",
+      "group": "Group B"
+    },
+    {
+      "id": "t-13",
+      "name": "MECH ALPHA",
+      "shortName": "MECH ALPHA",
+      "logo": "/logos/teams/MECH ALPHA.png",
+      "group": "Group B"
+    },
+    {
+      "id": "t-14",
+      "name": "MECH BETA",
+      "shortName": "MECH BETA",
+      "logo": "/logos/teams/MECH BETA.png",
+      "group": "Group B"
+    }
+  ],
+  "seasons": [
+    {
+      "id": "s-1",
+      "name": "Season 1",
+      "status": "completed",
+      "championId": "t-3",
+      "runnerUpId": "t-2",
+      "topScorer": {
+        "name": "MATHEW",
+        "teamName": "CIVIL",
+        "goals": 5
+      },
+      "staticStandings": [
+        {
+          "teamId": "t-3",
+          "name": "CIVIL",
+          "shortName": "CIVIL",
+          "played": 13,
+          "won": 10,
+          "drawn": 2,
+          "lost": 1,
+          "goalsFor": 25,
+          "goalsAgainst": 8,
+          "goalDifference": 17,
+          "points": 32
+        },
+        {
+          "teamId": "t-2",
+          "name": "APPLIED",
+          "shortName": "APPLIED",
+          "played": 13,
+          "won": 9,
+          "drawn": 3,
+          "lost": 1,
+          "goalsFor": 22,
+          "goalsAgainst": 9,
+          "goalDifference": 13,
+          "points": 30
+        },
+        {
+          "teamId": "t-10",
+          "name": "EC GAMMA",
+          "shortName": "EC GAMMA",
+          "played": 13,
+          "won": 8,
+          "drawn": 2,
+          "lost": 3,
+          "goalsFor": 19,
+          "goalsAgainst": 12,
+          "goalDifference": 7,
+          "points": 26
+        },
+        {
+          "teamId": "t-9",
+          "name": "EC BETA",
+          "shortName": "EC BETA",
+          "played": 13,
+          "won": 7,
+          "drawn": 3,
+          "lost": 3,
+          "goalsFor": 18,
+          "goalsAgainst": 14,
+          "goalDifference": 4,
+          "points": 24
+        },
+        {
+          "teamId": "t-1",
+          "name": "AI & DS",
+          "shortName": "AI & DS",
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0
+        },
+        {
+          "teamId": "t-4",
+          "name": "CS ALPHA",
+          "shortName": "CS ALPHA",
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0
+        },
+        {
+          "teamId": "t-5",
+          "name": "CS BETA",
+          "shortName": "CS BETA",
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0
+        },
+        {
+          "teamId": "t-6",
+          "name": "CS GAMMA",
+          "shortName": "CS GAMMA",
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0
+        },
+        {
+          "teamId": "t-7",
+          "name": "CSBS",
+          "shortName": "CSBS",
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0
+        },
+        {
+          "teamId": "t-8",
+          "name": "EC ALPHA",
+          "shortName": "EC ALPHA",
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0
+        },
+        {
+          "teamId": "t-11",
+          "name": "EEE",
+          "shortName": "EEE",
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0
+        },
+        {
+          "teamId": "t-12",
+          "name": "IT",
+          "shortName": "IT",
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0
+        },
+        {
+          "teamId": "t-13",
+          "name": "MECH ALPHA",
+          "shortName": "MECH ALPHA",
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0
+        },
+        {
+          "teamId": "t-14",
+          "name": "MECH BETA",
+          "shortName": "MECH BETA",
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0
+        }
+      ]
+    },
+    {
+      "id": "s-2",
+      "name": "Season 2",
+      "status": "completed",
+      "championId": "t-3",
+      "runnerUpId": "t-10",
+      "topScorer": {
+        "name": "NEO",
+        "teamName": "EC GAMMA",
+        "goals": 6
+      },
+      "groups": {
+        "Group A": [
+          "t-13",
+          "t-12",
+          "t-8",
+          "t-14"
+        ],
+        "Group B": [
+          "t-2",
+          "t-5",
+          "t-10",
+          "t-4"
+        ],
+        "Group C": [
+          "t-1",
+          "t-3",
+          "t-7"
+        ],
+        "Group D": [
+          "t-6",
+          "t-9",
+          "t-11"
+        ]
+      }
+    },
+    {
+      "id": "s-3",
+      "name": "Season 3",
+      "status": "completed",
+      "championId": "t-2",
+      "runnerUpId": "t-3",
+      "topScorer": {
+        "name": "MATHEW",
+        "teamName": "CIVIL",
+        "goals": 6
+      },
+      "groups": {
+        "Group A": [
+          "t-2",
+          "t-3",
+          "t-7"
+        ],
+        "Group B": [
+          "t-6",
+          "t-5",
+          "t-8",
+          "t-14"
+        ],
+        "Group C": [
+          "t-1",
+          "t-12",
+          "t-9"
+        ],
+        "Group D": [
+          "t-13",
+          "t-11",
+          "t-10"
+        ]
+      }
+    },
+    {
+      "id": "s-4",
+      "name": "Season 4",
+      "status": "upcoming",
+      "groups": {
+        "Group A": [
+          "t-1",
+          "t-13",
+          "t-5",
+          "t-11"
+        ],
+        "Group B": [
+          "t-7",
+          "t-8",
+          "t-12",
+          "t-10"
+        ],
+        "Group C": [
+          "t-6",
+          "t-4",
+          "t-2"
+        ],
+        "Group D": [
+          "t-3",
+          "t-14",
+          "t-9"
+        ]
+      }
+    }
+  ],
+  "matches": [
+    {
+      "id": "m-s4-1",
+      "seasonId": "s-4",
+      "team1Id": "t-4",
+      "team2Id": "t-13",
+      "score1": null,
+      "score2": null,
+      "date": "2026-08-10",
+      "time": "15:00",
+      "status": "upcoming",
+      "stage": "Group Stage"
+    },
+    {
+      "id": "m-s4-2",
+      "seasonId": "s-4",
+      "team1Id": "t-8",
+      "team2Id": "t-12",
+      "score1": null,
+      "score2": null,
+      "date": "2026-08-10",
+      "time": "16:30",
+      "status": "upcoming",
+      "stage": "Group Stage"
+    },
+    {
+      "id": "m-s4-3",
+      "seasonId": "s-4",
+      "team1Id": "t-7",
+      "team2Id": "t-1",
+      "score1": null,
+      "score2": null,
+      "date": "2026-08-11",
+      "time": "15:00",
+      "status": "upcoming",
+      "stage": "Group Stage"
+    },
+    {
+      "id": "m-s4-4",
+      "seasonId": "s-4",
+      "team1Id": "t-11",
+      "team2Id": "t-2",
+      "score1": null,
+      "score2": null,
+      "date": "2026-08-11",
+      "time": "16:30",
+      "status": "upcoming",
+      "stage": "Group Stage"
+    },
+    {
+      "id": "m-s2-1",
+      "seasonId": "s-2",
+      "team1Id": "t-2",
+      "team2Id": "t-10",
+      "score1": 1,
+      "score2": 4,
+      "date": "2024-04-10",
+      "time": "15:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-2": [
+          "PAVAN"
+        ],
+        "t-10": [
+          "NEO",
+          "NEO",
+          "NAVEEN",
+          "RICKY"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-2",
+      "seasonId": "s-2",
+      "team1Id": "t-1",
+      "team2Id": "t-3",
+      "score1": 0,
+      "score2": 0,
+      "date": "2024-04-10",
+      "time": "15:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-1": [],
+        "t-3": []
+      }
+    },
+    {
+      "id": "m-s2-3",
+      "seasonId": "s-2",
+      "team1Id": "t-6",
+      "team2Id": "t-9",
+      "score1": 0,
+      "score2": 1,
+      "date": "2024-04-10",
+      "time": "16:30",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-6": [],
+        "t-9": [
+          "DON"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-4",
+      "seasonId": "s-2",
+      "team1Id": "t-14",
+      "team2Id": "t-8",
+      "score1": 2,
+      "score2": 1,
+      "date": "2024-04-10",
+      "time": "17:15",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-14": [
+          "MEHTHAB",
+          "TOMIN"
+        ],
+        "t-8": [
+          "ALEX"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-5",
+      "seasonId": "s-2",
+      "team1Id": "t-5",
+      "team2Id": "t-10",
+      "score1": 0,
+      "score2": 0,
+      "date": "2024-04-10",
+      "time": "18:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-5": [],
+        "t-10": []
+      }
+    },
+    {
+      "id": "m-s2-6",
+      "seasonId": "s-2",
+      "team1Id": "t-13",
+      "team2Id": "t-12",
+      "score1": 0,
+      "score2": 0,
+      "date": "2024-04-10",
+      "time": "18:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-13": [],
+        "t-12": []
+      }
+    },
+    {
+      "id": "m-s2-7",
+      "seasonId": "s-2",
+      "team1Id": "t-9",
+      "team2Id": "t-11",
+      "score1": 1,
+      "score2": 0,
+      "date": "2024-04-11",
+      "time": "15:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-9": [
+          "OG"
+        ],
+        "t-11": []
+      }
+    },
+    {
+      "id": "m-s2-8",
+      "seasonId": "s-2",
+      "team1Id": "t-3",
+      "team2Id": "t-7",
+      "score1": 3,
+      "score2": 0,
+      "date": "2024-04-11",
+      "time": "15:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-3": [
+          "MATHEW",
+          "ZAYAN",
+          "SAHIL"
+        ],
+        "t-7": []
+      }
+    },
+    {
+      "id": "m-s2-9",
+      "seasonId": "s-2",
+      "team1Id": "t-4",
+      "team2Id": "t-10",
+      "score1": 2,
+      "score2": 2,
+      "date": "2024-04-11",
+      "time": "16:30",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-4": [
+          "ADWAITH",
+          "ADITYA"
+        ],
+        "t-10": [
+          "NEO",
+          "NAVEEN"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-10",
+      "seasonId": "s-2",
+      "team1Id": "t-8",
+      "team2Id": "t-12",
+      "score1": 0,
+      "score2": 3,
+      "date": "2024-04-11",
+      "time": "17:15",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-8": [],
+        "t-12": [
+          "ELVIN",
+          "ELVIN",
+          "ELVIN"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-11",
+      "seasonId": "s-2",
+      "team1Id": "t-2",
+      "team2Id": "t-5",
+      "score1": 1,
+      "score2": 0,
+      "date": "2024-04-11",
+      "time": "18:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-2": [
+          "JERIN"
+        ],
+        "t-5": []
+      }
+    },
+    {
+      "id": "m-s2-12",
+      "seasonId": "s-2",
+      "team1Id": "t-1",
+      "team2Id": "t-7",
+      "score1": 2,
+      "score2": 0,
+      "date": "2024-04-11",
+      "time": "18:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-1": [
+          "FADI",
+          "JESWIN"
+        ],
+        "t-7": []
+      }
+    },
+    {
+      "id": "m-s2-13",
+      "seasonId": "s-2",
+      "team1Id": "t-13",
+      "team2Id": "t-8",
+      "score1": 3,
+      "score2": 1,
+      "date": "2024-04-12",
+      "time": "15:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-13": [
+          "ANAND",
+          "ALLEN PK",
+          "ALLEN PK"
+        ],
+        "t-8": [
+          "AMAL"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-14",
+      "seasonId": "s-2",
+      "team1Id": "t-11",
+      "team2Id": "t-6",
+      "score1": 4,
+      "score2": 1,
+      "date": "2024-04-12",
+      "time": "15:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-11": [
+          "CHRIS",
+          "BALU",
+          "POPPY",
+          "ROSHAN"
+        ],
+        "t-6": [
+          "ADITYA"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-15",
+      "seasonId": "s-2",
+      "team1Id": "t-14",
+      "team2Id": "t-12",
+      "score1": 1,
+      "score2": 1,
+      "date": "2024-04-12",
+      "time": "16:30",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-14": [
+          "TOMIN"
+        ],
+        "t-12": [
+          "DEON"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-16",
+      "seasonId": "s-2",
+      "team1Id": "t-4",
+      "team2Id": "t-2",
+      "score1": 1,
+      "score2": 0,
+      "date": "2024-04-12",
+      "time": "17:15",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-4": [
+          "AVIN"
+        ],
+        "t-2": []
+      }
+    },
+    {
+      "id": "m-s2-17",
+      "seasonId": "s-2",
+      "team1Id": "t-14",
+      "team2Id": "t-13",
+      "score1": 1,
+      "score2": 0,
+      "date": "2024-04-12",
+      "time": "18:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-14": [
+          "OG"
+        ],
+        "t-13": []
+      }
+    },
+    {
+      "id": "m-s2-18",
+      "seasonId": "s-2",
+      "team1Id": "t-4",
+      "team2Id": "t-5",
+      "score1": 0,
+      "score2": 1,
+      "date": "2024-04-12",
+      "time": "18:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-4": [],
+        "t-5": [
+          "IGNATIOUS"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-19",
+      "seasonId": "s-2",
+      "team1Id": "t-9",
+      "team2Id": "t-5",
+      "score1": 2,
+      "score2": 0,
+      "date": "2024-04-13",
+      "time": "15:00",
+      "status": "completed",
+      "stage": "Quarterfinal",
+      "scorers": {
+        "t-9": [
+          "JIYAD",
+          "JUSSAE"
+        ],
+        "t-5": []
+      }
+    },
+    {
+      "id": "m-s2-20",
+      "seasonId": "s-2",
+      "team1Id": "t-1",
+      "team2Id": "t-14",
+      "score1": 1,
+      "score2": 2,
+      "date": "2024-04-13",
+      "time": "16:30",
+      "status": "completed",
+      "stage": "Quarterfinal",
+      "scorers": {
+        "t-1": [
+          "OG"
+        ],
+        "t-14": [
+          "TOMIN",
+          "MARK"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-21",
+      "seasonId": "s-2",
+      "team1Id": "t-3",
+      "team2Id": "t-12",
+      "score1": 1,
+      "score2": 0,
+      "date": "2024-04-13",
+      "time": "18:00",
+      "status": "completed",
+      "stage": "Quarterfinal",
+      "scorers": {
+        "t-3": [
+          "SHADIL"
+        ],
+        "t-12": []
+      }
+    },
+    {
+      "id": "m-s2-22",
+      "seasonId": "s-2",
+      "team1Id": "t-11",
+      "team2Id": "t-10",
+      "score1": 0,
+      "score2": 2,
+      "date": "2024-04-13",
+      "time": "19:30",
+      "status": "completed",
+      "stage": "Quarterfinal",
+      "scorers": {
+        "t-11": [],
+        "t-10": [
+          "NEO",
+          "NEO"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-23",
+      "seasonId": "s-2",
+      "team1Id": "t-3",
+      "team2Id": "t-14",
+      "score1": 1,
+      "score2": 0,
+      "date": "2024-04-14",
+      "time": "16:00",
+      "status": "completed",
+      "stage": "Semifinal",
+      "scorers": {
+        "t-3": [
+          "SHAKEEB"
+        ],
+        "t-14": []
+      }
+    },
+    {
+      "id": "m-s2-24",
+      "seasonId": "s-2",
+      "team1Id": "t-9",
+      "team2Id": "t-10",
+      "score1": 1,
+      "score2": 3,
+      "date": "2024-04-14",
+      "time": "18:00",
+      "status": "completed",
+      "stage": "Semifinal",
+      "scorers": {
+        "t-9": [
+          "JUSSAE"
+        ],
+        "t-10": [
+          "VIDHU",
+          "NAVEEN",
+          "NEO"
+        ]
+      }
+    },
+    {
+      "id": "m-s2-25",
+      "seasonId": "s-2",
+      "team1Id": "t-9",
+      "team2Id": "t-14",
+      "score1": 0,
+      "score2": 0,
+      "date": "2024-04-15",
+      "time": "15:00",
+      "status": "completed",
+      "stage": "Third Place Playoff",
+      "scorers": {
+        "t-9": [],
+        "t-14": []
+      }
+    },
+    {
+      "id": "m-s2-26",
+      "seasonId": "s-2",
+      "team1Id": "t-3",
+      "team2Id": "t-10",
+      "score1": 3,
+      "score2": 0,
+      "date": "2024-04-15",
+      "time": "17:00",
+      "status": "completed",
+      "stage": "Final",
+      "scorers": {
+        "t-3": [
+          "SHADHIL",
+          "JACOB",
+          "JACOB"
+        ],
+        "t-10": []
+      }
+    },
+    {
+      "id": "m-s3-1",
+      "seasonId": "s-3",
+      "team1Id": "t-11",
+      "team2Id": "t-13",
+      "score1": 0,
+      "score2": 1,
+      "date": "2025-04-10",
+      "time": "15:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-11": [],
+        "t-13": [
+          "ANAND"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-2",
+      "seasonId": "s-3",
+      "team1Id": "t-9",
+      "team2Id": "t-1",
+      "score1": 1,
+      "score2": 2,
+      "date": "2025-04-10",
+      "time": "15:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-9": [
+          "DON"
+        ],
+        "t-1": [
+          "SOURAV",
+          "FADI"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-3",
+      "seasonId": "s-3",
+      "team1Id": "t-14",
+      "team2Id": "t-8",
+      "score1": 4,
+      "score2": 0,
+      "date": "2025-04-10",
+      "time": "16:30",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-14": [
+          "MARK",
+          "MARK",
+          "MARK",
+          "TOMIN"
+        ],
+        "t-8": []
+      }
+    },
+    {
+      "id": "m-s3-4",
+      "seasonId": "s-3",
+      "team1Id": "t-6",
+      "team2Id": "t-5",
+      "score1": 2,
+      "score2": 1,
+      "date": "2025-04-10",
+      "time": "17:15",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-6": [
+          "SAMUEL",
+          "PRANAV"
+        ],
+        "t-5": [
+          "IGNATIOUS"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-5",
+      "seasonId": "s-3",
+      "team1Id": "t-10",
+      "team2Id": "t-11",
+      "score1": 3,
+      "score2": 0,
+      "date": "2025-04-10",
+      "time": "18:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-10": [
+          "OG",
+          "OG",
+          "OG"
+        ],
+        "t-11": []
+      }
+    },
+    {
+      "id": "m-s3-6",
+      "seasonId": "s-3",
+      "team1Id": "t-2",
+      "team2Id": "t-3",
+      "score1": 0,
+      "score2": 2,
+      "date": "2025-04-10",
+      "time": "18:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-2": [],
+        "t-3": [
+          "ALFIN",
+          "MATHEW"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-7",
+      "seasonId": "s-3",
+      "team1Id": "t-12",
+      "team2Id": "t-1",
+      "score1": 0,
+      "score2": 4,
+      "date": "2025-04-11",
+      "time": "15:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-12": [],
+        "t-1": [
+          "SOURAV",
+          "FADI",
+          "JESWIN",
+          "JESWIN"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-8",
+      "seasonId": "s-3",
+      "team1Id": "t-14",
+      "team2Id": "t-6",
+      "score1": 3,
+      "score2": 2,
+      "date": "2025-04-11",
+      "time": "15:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-14": [
+          "SHAFTHAL",
+          "TOMIN",
+          "TOMIN"
+        ],
+        "t-6": [
+          "PRANAV",
+          "SAI"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-9",
+      "seasonId": "s-3",
+      "team1Id": "t-10",
+      "team2Id": "t-13",
+      "score1": 1,
+      "score2": 0,
+      "date": "2025-04-11",
+      "time": "16:30",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-10": [
+          "NEO"
+        ],
+        "t-13": []
+      }
+    },
+    {
+      "id": "m-s3-10",
+      "seasonId": "s-3",
+      "team1Id": "t-12",
+      "team2Id": "t-9",
+      "score1": 0,
+      "score2": 1,
+      "date": "2025-04-11",
+      "time": "17:15",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-12": [],
+        "t-9": [
+          "DON"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-11",
+      "seasonId": "s-3",
+      "team1Id": "t-8",
+      "team2Id": "t-5",
+      "score1": 1,
+      "score2": 3,
+      "date": "2025-04-11",
+      "time": "18:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-8": [
+          "AMAL"
+        ],
+        "t-5": [
+          "IGNATIOUS",
+          "DAVID",
+          "DAVID"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-12",
+      "seasonId": "s-3",
+      "team1Id": "t-3",
+      "team2Id": "t-7",
+      "score1": 3,
+      "score2": 2,
+      "date": "2025-04-11",
+      "time": "18:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-3": [
+          "MATHEW",
+          "MATHEW",
+          "MATHEW"
+        ],
+        "t-7": [
+          "ASWIN",
+          "ASWIN"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-13",
+      "seasonId": "s-3",
+      "team1Id": "t-8",
+      "team2Id": "t-6",
+      "score1": 0,
+      "score2": 3,
+      "date": "2025-04-12",
+      "time": "15:00",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-8": [],
+        "t-6": [
+          "OG",
+          "OG",
+          "OG"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-14",
+      "seasonId": "s-3",
+      "team1Id": "t-2",
+      "team2Id": "t-7",
+      "score1": 6,
+      "score2": 3,
+      "date": "2025-04-12",
+      "time": "15:45",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-2": [
+          "PAVAN",
+          "ROHIT",
+          "JONAH",
+          "JONAH",
+          "CALVIN",
+          "CALVIN"
+        ],
+        "t-7": [
+          "ABEL",
+          "AJIN",
+          "AJIN"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-15",
+      "seasonId": "s-3",
+      "team1Id": "t-5",
+      "team2Id": "t-14",
+      "score1": 3,
+      "score2": 1,
+      "date": "2025-04-12",
+      "time": "16:30",
+      "status": "completed",
+      "stage": "Group Stage",
+      "scorers": {
+        "t-5": [
+          "DANWANTH",
+          "IGNATIUS",
+          "INDRAJITH"
+        ],
+        "t-14": [
+          "MARK"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-16",
+      "seasonId": "s-3",
+      "team1Id": "t-13",
+      "team2Id": "t-14",
+      "score1": 0,
+      "score2": 0,
+      "date": "2025-04-13",
+      "time": "15:00",
+      "status": "completed",
+      "stage": "Quarterfinal",
+      "scorers": {
+        "t-13": [],
+        "t-14": []
+      }
+    },
+    {
+      "id": "m-s3-17",
+      "seasonId": "s-3",
+      "team1Id": "t-10",
+      "team2Id": "t-6",
+      "score1": 2,
+      "score2": 0,
+      "date": "2025-04-13",
+      "time": "16:30",
+      "status": "completed",
+      "stage": "Quarterfinal",
+      "scorers": {
+        "t-10": [
+          "NEO",
+          "PRAVEEN"
+        ],
+        "t-6": []
+      }
+    },
+    {
+      "id": "m-s3-18",
+      "seasonId": "s-3",
+      "team1Id": "t-1",
+      "team2Id": "t-2",
+      "score1": 0,
+      "score2": 0,
+      "date": "2025-04-13",
+      "time": "18:00",
+      "status": "completed",
+      "stage": "Quarterfinal",
+      "scorers": {
+        "t-1": [],
+        "t-2": []
+      }
+    },
+    {
+      "id": "m-s3-19",
+      "seasonId": "s-3",
+      "team1Id": "t-3",
+      "team2Id": "t-9",
+      "score1": 0,
+      "score2": 0,
+      "date": "2025-04-13",
+      "time": "19:30",
+      "status": "completed",
+      "stage": "Quarterfinal",
+      "scorers": {
+        "t-3": [],
+        "t-9": []
+      }
+    },
+    {
+      "id": "m-s3-20",
+      "seasonId": "s-3",
+      "team1Id": "t-3",
+      "team2Id": "t-14",
+      "score1": 3,
+      "score2": 2,
+      "date": "2025-04-14",
+      "time": "16:00",
+      "status": "completed",
+      "stage": "Semifinal",
+      "scorers": {
+        "t-3": [
+          "ZAYAN",
+          "MATHEW",
+          "MATHEW"
+        ],
+        "t-14": [
+          "NADEEM",
+          "NADEEM"
+        ]
+      }
+    },
+    {
+      "id": "m-s3-21",
+      "seasonId": "s-3",
+      "team1Id": "t-10",
+      "team2Id": "t-2",
+      "score1": 0,
+      "score2": 0,
+      "date": "2025-04-14",
+      "time": "18:00",
+      "status": "completed",
+      "stage": "Semifinal",
+      "scorers": {
+        "t-10": [],
+        "t-2": []
+      }
+    },
+    {
+      "id": "m-s3-22",
+      "seasonId": "s-3",
+      "team1Id": "t-3",
+      "team2Id": "t-2",
+      "score1": 0,
+      "score2": 1,
+      "date": "2025-04-15",
+      "time": "17:00",
+      "status": "completed",
+      "stage": "Final",
+      "scorers": {
+        "t-3": [],
+        "t-2": [
+          "CALVIN"
+        ]
+      }
+    }
+  ],
+  "adminPassword": "admin_decimo_2026"
+}
