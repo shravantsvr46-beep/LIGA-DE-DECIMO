@@ -21,6 +21,15 @@ export default function RootLayout({ children }) {
     <html lang="en" className="dark scroll-smooth">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (window.location.hostname.includes('onrender.com')) {
+                window.location.replace('https://liga-de-decimo.vercel.app/');
+              }
+            `,
+          }}
+        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} bg-black text-neutral-100 font-sans min-h-screen selection:bg-neutral-800 selection:text-white`}>
         {children}
