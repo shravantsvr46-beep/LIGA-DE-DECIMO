@@ -60,14 +60,51 @@ const HIGHLIGHTS = [
   }
 ];
 
+let cachedDb = null;
+
 export default function HomePage() {
-  const [db, setDb] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [loadingState, setLoadingState] = useState('init');
+  const [db, setDb] = useState(cachedDb);
+  const [loading, setLoading] = useState(!cachedDb);
+  const [loadingState, setLoadingState] = useState(cachedDb ? 'complete' : 'init');
   const [error, setError] = useState(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
+
+  const openTeamModal = (team) => {
+    setSelectedTeam(team);
+    if (typeof window !== 'undefined') {
+      window.history.pushState({ modal: 'team', teamId: team.id }, '', `#team=${team.id}`);
+    }
+  };
+
+  const closeTeamModal = () => {
+    setSelectedTeam(null);
+    if (typeof window !== 'undefined' && window.location.hash.startsWith('#team=')) {
+      window.history.back();
+    }
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (typeof window !== 'undefined') {
+        if (window.location.hash.startsWith('#team=')) {
+          const teamId = window.location.hash.replace('#team=', '');
+          if (db?.teams) {
+            const found = db.teams.find(t => t.id === teamId);
+            if (found) {
+              setSelectedTeam(found);
+              return;
+            }
+          }
+        }
+        setSelectedTeam(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [db]);
 
   const getTeamForm = (teamId) => {
     if (!db || !db.matches) return [];
@@ -118,6 +155,7 @@ export default function HomePage() {
       const data = await res.json();
       
       setLoadingState('setting-state');
+      cachedDb = data;
       setDb(data);
       setError(null);
       setLoadingState('complete');
@@ -132,7 +170,7 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchDb();
+    fetchDb(Boolean(cachedDb));
     
     // Auto-refresh every 15 seconds to ensure live updates propagate instantly
     const interval = setInterval(() => {
@@ -369,7 +407,7 @@ export default function HomePage() {
           {db.teams.map((team) => (
             <button
               key={team.id}
-              onClick={() => setSelectedTeam(team)}
+              onClick={() => openTeamModal(team)}
               className="group flex flex-col items-center justify-center p-6 bg-neutral-900/10 hover:bg-neutral-900/30 border border-neutral-900 hover:border-neutral-800 rounded-lg transition-all duration-300 w-full text-center focus:outline-none"
             >
               {/* Badge */}
@@ -525,7 +563,7 @@ export default function HomePage() {
         <TeamStatsModal 
           team={selectedTeam} 
           db={db} 
-          onClose={() => setSelectedTeam(null)} 
+          onClose={closeTeamModal} 
         />
       )}
 

@@ -139,23 +139,56 @@ function RankingsTable({ rows, teamsMap }) {
   );
 }
 
+let cachedSeasonDb = null;
+
 export default function SeasonPage() {
   const params   = useParams();
   const router   = useRouter();
   const seasonId = params.id;
 
-  const [db,        setDb]        = useState(null);
-  const [loading,   setLoading]   = useState(true);
+  const [db,        setDb]        = useState(cachedSeasonDb);
+  const [loading,   setLoading]   = useState(!cachedSeasonDb);
   const [activeTab, setActiveTab] = useState('fixtures');
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    if (typeof window !== 'undefined') {
+      window.history.pushState({ tab: tabId }, '', `#${tabId}`);
+    }
+  };
+
+  useEffect(() => {
+    const handlePop = () => {
+      if (typeof window !== 'undefined') {
+        const hash = window.location.hash.replace('#', '');
+        if (hash === 'table' || hash === 'fixtures') {
+          setActiveTab(hash);
+        } else {
+          setActiveTab('fixtures');
+        }
+      }
+    };
+
+    if (typeof window !== 'undefined' && window.location.hash) {
+      handlePop();
+    }
+
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  }, []);
 
   useEffect(() => {
     fetch('/api/db')
       .then(r => r.json())
-      .then(data => { setDb(data); setLoading(false); })
+      .then(data => {
+        cachedSeasonDb = data;
+        setDb(data);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) return (
+  if (loading && !db) return (
     <div className="min-h-screen bg-black flex items-center justify-center">
       <span className="text-neutral-500 font-mono text-sm tracking-widest animate-pulse">LOADING ARCHIVE...</span>
     </div>
@@ -304,7 +337,13 @@ export default function SeasonPage() {
       <header className="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-neutral-900">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 gap-4">
           <button
-            onClick={() => router.push('/#seasons')}
+            onClick={() => {
+              if (typeof window !== 'undefined' && window.history.length > 1) {
+                router.back();
+              } else {
+                router.push('/#seasons');
+              }
+            }}
             className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors duration-200 group shrink-0"
           >
             <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform duration-200" />
@@ -327,7 +366,7 @@ export default function SeasonPage() {
                 { id: 'fixtures', icon: <Calendar size={13} />, label: 'Fixtures & Results' },
                 { id: 'table',    icon: <Trophy   size={13} />, label: 'Points Table'       },
               ].map(tab => (
-                <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                <button key={tab.id} onClick={() => handleTabChange(tab.id)}
                   className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-mono tracking-wider transition-colors duration-200 border-b-2 ${
                     activeTab === tab.id ? 'border-white text-white font-medium' : 'border-transparent text-neutral-500 hover:text-neutral-200'
                   }`}>
