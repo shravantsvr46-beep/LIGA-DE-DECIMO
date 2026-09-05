@@ -201,6 +201,26 @@ export default function SeasonPage() {
     return Object.entries(counts).map(([n, q]) => `${n}${q > 1 ? "'".repeat(q) : "'"}`).join(', ');
   };
 
+  const formatSchedule = (dateStr, timeStr) => {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    if (isNaN(d.getTime())) return `${dateStr} ${timeStr || ''}`.trim();
+    const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
+    const dayNum = d.getDate();
+    const monthName = d.toLocaleDateString('en-US', { month: 'short' });
+    
+    let formattedTime = '';
+    if (timeStr && timeStr !== '00:00') {
+      const [h, m] = timeStr.split(':').map(Number);
+      if (!isNaN(h) && !isNaN(m)) {
+        const period = h >= 12 ? 'PM' : 'AM';
+        const hour12 = h % 12 === 0 ? 12 : h % 12;
+        formattedTime = ` · ${hour12}:${m.toString().padStart(2, '0')} ${period}`;
+      }
+    }
+    return `${dayName}, ${dayNum} ${monthName}${formattedTime}`;
+  };
+
   const MatchCard = ({ match }) => {
     const t1 = teamsMap[match.team1Id];
     const t2 = teamsMap[match.team2Id];
@@ -257,13 +277,20 @@ export default function SeasonPage() {
             )}
           </div>
         </div>
-        <div className="flex flex-col items-center md:items-end order-3">
+        <div className="flex flex-col items-center md:items-end order-3 gap-1">
           {isCompleted ? (
             <span className="text-xs font-mono text-neutral-500 border border-neutral-900 px-2 py-0.5 rounded">{t1Won ? `${t1?.shortName} Win` : t2Won ? `${t2?.shortName} Win` : 'Drawn'}</span>
           ) : isLive ? (
             <span className="text-xs font-mono text-red-500 border border-red-950/30 bg-red-950/10 px-2.5 py-0.5 rounded tracking-wider uppercase font-bold">In Progress</span>
           ) : (
-            <span className="text-xs font-mono text-neutral-500 border border-neutral-900 px-2 py-0.5 rounded tracking-wider uppercase">Upcoming</span>
+            <>
+              {match.date && (
+                <span className="text-xs font-mono font-medium text-neutral-300">
+                  {formatSchedule(match.date, match.time)}
+                </span>
+              )}
+              <span className="text-[10px] font-mono text-neutral-500 border border-neutral-900 px-2 py-0.5 rounded tracking-wider uppercase">Upcoming</span>
+            </>
           )}
         </div>
       </div>

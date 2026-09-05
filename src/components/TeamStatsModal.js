@@ -23,6 +23,26 @@ const PLACEMENTS = {
   }
 };
 
+function formatSchedule(dateStr, timeStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  if (isNaN(d.getTime())) return `${dateStr} ${timeStr || ''}`.trim();
+  const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
+  const dayNum = d.getDate();
+  const monthName = d.toLocaleDateString('en-US', { month: 'short' });
+  
+  let formattedTime = '';
+  if (timeStr && timeStr !== '00:00') {
+    const [h, m] = timeStr.split(':').map(Number);
+    if (!isNaN(h) && !isNaN(m)) {
+      const period = h >= 12 ? 'PM' : 'AM';
+      const hour12 = h % 12 === 0 ? 12 : h % 12;
+      formattedTime = ` · ${hour12}:${m.toString().padStart(2, '0')} ${period}`;
+    }
+  }
+  return `${dayName}, ${dayNum} ${monthName}${formattedTime}`;
+}
+
 export default function TeamStatsModal({ team, db, onClose }) {
   if (!team || !db) return null;
 
@@ -209,7 +229,7 @@ export default function TeamStatsModal({ team, db, onClose }) {
                     <div key={m.id} className="flex items-center justify-between p-3 bg-neutral-950 border border-neutral-900/60 rounded hover:border-neutral-800 transition-colors">
                       <div className="flex flex-col gap-0.5">
                         <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-wide">
-                          {m.seasonName} &middot; {m.stage}
+                          {m.seasonName} &middot; {m.stage}{m.status === 'upcoming' && m.date && ` · ${formatSchedule(m.date, m.time)}`}
                         </span>
                         <div className="flex items-center gap-2">
                           {m.opponent.logo ? (
