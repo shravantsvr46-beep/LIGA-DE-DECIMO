@@ -1,17 +1,9 @@
-import fs from 'fs';
-import path from 'path';
 import { calculateStandings, calculateAllTimeRankings, sortStandings } from '@/utils/standings';
-
-const DB_PATH = path.join(process.cwd(), 'src', 'data', 'db.json');
-
-function readDb() {
-  const fileContent = fs.readFileSync(DB_PATH, 'utf8');
-  return JSON.parse(fileContent);
-}
+import { getDb } from '@/utils/dbStorage';
 
 export async function GET() {
   try {
-    const db = readDb();
+    const db = await getDb();
     
     // Calculate standings for each season and group them
     const standings = {};

@@ -1,17 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-
-const DB_PATH = path.join(process.cwd(), 'src', 'data', 'db.json');
-
-function readDb() {
-  const fileContent = fs.readFileSync(DB_PATH, 'utf8');
-  return JSON.parse(fileContent);
-}
+import { getDb } from '@/utils/dbStorage';
 
 export async function POST(req) {
   try {
     const { password } = await req.json();
-    const db = readDb();
+    const db = await getDb();
     
     if (password === db.adminPassword) {
       return new Response(

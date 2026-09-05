@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Trophy, Shield, Plus, Edit2, Trash2, LogOut, Check, X, RefreshCw, Upload, Key } from 'lucide-react';
+import { Trophy, Shield, Plus, Edit2, Trash2, LogOut, Check, X, RefreshCw, Upload, Key, Download } from 'lucide-react';
 import { calculateStandings } from '@/utils/standings';
 
 export default function AdminPage() {
@@ -187,6 +187,38 @@ export default function AdminPage() {
     const dayNum = d.getDate();
     const monthName = d.toLocaleDateString('en-US', { month: 'short' });
     return `${dayName}, ${dayNum} ${monthName}`;
+  };
+
+  const handleExportDb = () => {
+    if (!db) return;
+    const jsonStr = JSON.stringify(db, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `liga-de-decimo-backup-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportDb = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      if (!parsed.seasons || !parsed.matches || !parsed.teams) {
+        alert('Invalid backup JSON file.');
+        return;
+      }
+      if (!confirm('Are you sure you want to restore database from this backup? Current data will be replaced.')) return;
+      await callAdminApi('restoreDb', { fullDb: parsed });
+      alert('Database restored successfully!');
+    } catch (err) {
+      alert('Failed to parse backup file: ' + err.message);
+    }
   };
 
   // --- TEAM HANDLERS ---
@@ -417,23 +449,38 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 md:gap-6">
-          <a href="/" className="text-xs font-mono text-neutral-400 hover:text-white transition-colors duration-200">
+        <div className="flex items-center gap-2 md:gap-4">
+          <a href="/" className="text-xs font-mono text-neutral-400 hover:text-white transition-colors duration-200 mr-1">
             View Public Site
           </a>
           <button 
+            onClick={handleExportDb}
+            title="Download full JSON backup of database"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 border border-neutral-800 hover:border-neutral-700 font-mono text-[10px] uppercase tracking-widest text-neutral-400 hover:text-white bg-neutral-950/60 rounded transition-all duration-300"
+          >
+            <Download size={12} />
+            <span className="hidden sm:inline">Backup</span>
+          </button>
+          <label 
+            title="Restore database from a JSON backup file"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 border border-neutral-800 hover:border-neutral-700 font-mono text-[10px] uppercase tracking-widest text-neutral-400 hover:text-white bg-neutral-950/60 rounded transition-all duration-300 cursor-pointer"
+          >
+            <Upload size={12} />
+            <span className="hidden sm:inline">Restore</span>
+            <input type="file" accept=".json" onChange={handleImportDb} className="hidden" />
+          </label>
+          <button 
             onClick={() => setShowPasswordModal(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 border border-neutral-800 hover:border-neutral-700 font-mono text-[10px] uppercase tracking-widest text-neutral-300 hover:text-white bg-neutral-950/60 rounded transition-all duration-300"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 border border-neutral-800 hover:border-neutral-700 font-mono text-[10px] uppercase tracking-widest text-neutral-300 hover:text-white bg-neutral-950/60 rounded transition-all duration-300"
           >
             <Key size={12} />
-            Change Password
+            <span className="hidden sm:inline">Password</span>
           </button>
           <button 
             onClick={handleLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 border border-neutral-800 hover:border-red-900/60 font-mono text-[10px] uppercase tracking-widest text-neutral-400 hover:text-red-500 bg-neutral-950/60 rounded transition-all duration-300"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 border border-neutral-800 hover:border-red-900/60 font-mono text-[10px] uppercase tracking-widest text-neutral-400 hover:text-red-500 bg-neutral-950/60 rounded transition-all duration-300"
           >
             <LogOut size={12} />
-            Sign Out
           </button>
         </div>
       </nav>

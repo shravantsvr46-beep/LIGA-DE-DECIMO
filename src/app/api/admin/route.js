@@ -1,16 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-
-const DB_PATH = path.join(process.cwd(), 'src', 'data', 'db.json');
-
-function readDb() {
-  const fileContent = fs.readFileSync(DB_PATH, 'utf8');
-  return JSON.parse(fileContent);
-}
-
-function writeDb(data) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
-}
+import { getDb, saveDb } from '@/utils/dbStorage';
 
 export async function POST(req) {
   try {
@@ -25,7 +13,7 @@ export async function POST(req) {
 
     const body = await req.json();
     const { action } = body;
-    const db = readDb();
+    const db = await getDb();
 
     if (action === 'saveTeam') {
       const { team } = body;
@@ -59,7 +47,7 @@ export async function POST(req) {
         db.teams.push(newTeam);
       }
 
-      writeDb(db);
+      await saveDb(db);
       return new Response(
         JSON.stringify({ success: true, message: 'Team saved successfully.' }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
@@ -80,7 +68,7 @@ export async function POST(req) {
       // Remove all matches involving this team
       db.matches = db.matches.filter(m => m.team1Id !== id && m.team2Id !== id);
 
-      writeDb(db);
+      await saveDb(db);
       return new Response(
         JSON.stringify({ success: true, message: 'Team and associated matches deleted.' }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
@@ -166,7 +154,7 @@ export async function POST(req) {
         db.matches.push(newMatch);
       }
 
-      writeDb(db);
+      await saveDb(db);
       return new Response(
         JSON.stringify({ success: true, message: 'Match saved successfully.' }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
@@ -183,7 +171,7 @@ export async function POST(req) {
       }
 
       db.adminPassword = newPassword.trim();
-      writeDb(db);
+      await saveDb(db);
       return new Response(
         JSON.stringify({ success: true, message: 'Admin password updated successfully.' }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
@@ -200,10 +188,25 @@ export async function POST(req) {
       }
 
       db.matches = db.matches.filter(m => m.id !== id);
-      writeDb(db);
+      await saveDb(db);
 
       return new Response(
         JSON.stringify({ success: true, message: 'Match deleted successfully.' }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (action === 'restoreDb') {
+      const { fullDb } = body;
+      if (!fullDb || !Array.isArray(fullDb.seasons) || !Array.isArray(fullDb.matches) || !Array.isArray(fullDb.teams)) {
+        return new Response(
+          JSON.stringify({ error: 'Invalid database backup structure.' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+      await saveDb(fullDb);
+      return new Response(
+        JSON.stringify({ success: true, message: 'Database restored successfully from backup.' }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -215,7 +218,7 @@ export async function POST(req) {
   } catch (error) {
     console.error('Admin mutation error:', error);
     return new Response(
-      JSON.stringify({ error: 'Server error processing request' }),
+      JSON.stringify({ error: error.message || 'Server error processing request' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
