@@ -116,10 +116,11 @@ export async function POST(req) {
             team2Id: match.team2Id,
             score1,
             score2,
-            date: match.date || '2026-08-01',
-            time: match.time || '15:00',
+            date: match.date || db.matches[idx].date || '2026-09-08',
+            time: match.time || db.matches[idx].time || '00:00',
             status: match.status || 'upcoming',
-            stage: match.stage || 'Group Stage'
+            stage: match.stage || 'Group Stage',
+            scorers: match.scorers !== undefined ? match.scorers : (db.matches[idx].scorers || {})
           };
         } else {
           return new Response(
@@ -136,10 +137,11 @@ export async function POST(req) {
           team2Id: match.team2Id,
           score1,
           score2,
-          date: match.date || '2026-08-01',
-          time: match.time || '15:00',
+          date: match.date || '2026-09-08',
+          time: match.time || '00:00',
           status: match.status || 'upcoming',
-          stage: match.stage || 'Group Stage'
+          stage: match.stage || 'Group Stage',
+          scorers: match.scorers || {}
         };
         db.matches.push(newMatch);
       }

@@ -30,7 +30,9 @@ export default function AdminPage() {
     date: '',
     time: '',
     status: 'upcoming',
-    stage: 'Group Stage'
+    stage: 'Group Stage',
+    scorers1: '',
+    scorers2: ''
   });
 
   const [editingTeam, setEditingTeam] = useState(null);
@@ -201,6 +203,11 @@ export default function AdminPage() {
       return;
     }
 
+    const parseScorers = (str) => {
+      if (!str) return [];
+      return str.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
+    };
+
     const matchPayload = {
       seasonId: activeSeasonId,
       team1Id: matchForm.team1Id,
@@ -208,9 +215,13 @@ export default function AdminPage() {
       score1: matchForm.score1,
       score2: matchForm.score2,
       date: matchForm.date || new Date().toISOString().split('T')[0],
-      time: matchForm.time || '15:00',
+      time: matchForm.time || '00:00',
       status: matchForm.status,
-      stage: matchForm.stage
+      stage: matchForm.stage,
+      scorers: {
+        [matchForm.team1Id]: parseScorers(matchForm.scorers1),
+        [matchForm.team2Id]: parseScorers(matchForm.scorers2)
+      }
     };
 
     if (editingMatch) {
@@ -228,13 +239,17 @@ export default function AdminPage() {
         date: '',
         time: '',
         status: 'upcoming',
-        stage: 'Group Stage'
+        stage: 'Group Stage',
+        scorers1: '',
+        scorers2: ''
       });
     } catch (err) {}
   };
 
   const startEditMatch = (match) => {
     setEditingMatch(match);
+    const s1 = match.scorers?.[match.team1Id] || [];
+    const s2 = match.scorers?.[match.team2Id] || [];
     setMatchForm({
       team1Id: match.team1Id,
       team2Id: match.team2Id,
@@ -243,7 +258,9 @@ export default function AdminPage() {
       date: match.date,
       time: match.time,
       status: match.status,
-      stage: match.stage
+      stage: match.stage,
+      scorers1: s1.join(', '),
+      scorers2: s2.join(', ')
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -533,6 +550,35 @@ export default function AdminPage() {
                             className="w-full bg-neutral-950 border border-neutral-850 text-white text-xs px-3 py-2 rounded focus:border-white focus:outline-none font-mono"
                             placeholder="0"
                           />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-neutral-900">
+                        <div>
+                          <label className="block text-[9px] font-mono uppercase tracking-widest text-neutral-400 mb-1">
+                            Team 1 Scorers (comma-separated)
+                          </label>
+                          <input
+                            type="text"
+                            value={matchForm.scorers1}
+                            onChange={(e) => setMatchForm({ ...matchForm, scorers1: e.target.value })}
+                            className="w-full bg-neutral-950 border border-neutral-850 text-white text-xs px-3 py-2 rounded focus:border-white focus:outline-none font-mono"
+                            placeholder="e.g. Mathew, John"
+                          />
+                          <span className="text-[8px] text-neutral-600 font-mono">Repeat name if scored multiple goals</span>
+                        </div>
+                        <div>
+                          <label className="block text-[9px] font-mono uppercase tracking-widest text-neutral-400 mb-1">
+                            Team 2 Scorers (comma-separated)
+                          </label>
+                          <input
+                            type="text"
+                            value={matchForm.scorers2}
+                            onChange={(e) => setMatchForm({ ...matchForm, scorers2: e.target.value })}
+                            className="w-full bg-neutral-950 border border-neutral-850 text-white text-xs px-3 py-2 rounded focus:border-white focus:outline-none font-mono"
+                            placeholder="e.g. Rahul"
+                          />
+                          <span className="text-[8px] text-neutral-600 font-mono">Repeat name if scored multiple goals</span>
                         </div>
                       </div>
                     </div>
