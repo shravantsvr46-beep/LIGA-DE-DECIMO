@@ -1,19 +1,19 @@
 Tuesday - 8/9/26
-4:50 - ECC x IT
-5:15 - AIDS x CSB
-5:40 - CSC x AEI
-6:05 - CIVIL x MEB
+ECC x IT
+AIDS x CSB
+CSC x AEI
+CIVIL x MEB
 
 Wednesday - 9/9/26
-4:50 - IT x ECA
-5:15 - CSBS x ECC
-5:40 - MEB x ECB
-6:05 - MEA x EEE
+IT x ECA
+CSBS x ECC
+MEB x ECB
+MEA x EEE
 
 Thursday - 10/9/26
-4:50 - MEA x CSB
-5:15 - CSC x CSA
-5:40 - CSBS x IT
-6:05 - CIVIL x ECB
-6:30 - AIDS x EEE
-6:55 - ECA x ECC
+MEA x CSB
+CSC x CSA
+CSBS x IT
+CIVIL x ECB
+AIDS x EEE
+ECA x ECC
