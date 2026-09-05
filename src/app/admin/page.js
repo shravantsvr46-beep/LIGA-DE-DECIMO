@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Trophy, Shield, Plus, Edit2, Trash2, LogOut, Check, X, RefreshCw, Upload } from 'lucide-react';
+import { Trophy, Shield, Plus, Edit2, Trash2, LogOut, Check, X, RefreshCw, Upload, Key } from 'lucide-react';
 import { calculateStandings } from '@/utils/standings';
 
 export default function AdminPage() {
@@ -15,6 +15,10 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [mutationLoading, setMutationLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [newAdminPassword, setNewAdminPassword] = useState('');
+  const [pwLoading, setPwLoading] = useState(false);
 
   // Active Admin View
   const [activeTab, setActiveTab] = useState('matches'); // 'matches' | 'teams'
@@ -111,6 +115,7 @@ export default function AdminPage() {
 
   const callAdminApi = async (action, payload) => {
     setMutationLoading(true);
+    setSuccessMsg('');
     try {
       const res = await fetch('/api/admin', {
         method: 'POST',
@@ -121,13 +126,31 @@ export default function AdminPage() {
         body: JSON.stringify({ action, ...payload })
       });
 
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch (e) {
+        if (res.status === 401) {
+          localStorage.removeItem('admin_token');
+          setToken(null);
+          throw new Error('Session expired. Please log in again.');
+        }
+        throw new Error(`Server returned HTTP ${res.status}. If the server is restarting, please wait a moment and try again.`);
+      }
+
+      if (res.status === 401) {
+        localStorage.removeItem('admin_token');
+        setToken(null);
+        throw new Error('Session expired or unauthorized. Please log in again.');
+      }
 
       if (!res.ok) {
-        throw new Error(data.error || 'Operation failed');
+        throw new Error(data?.error || 'Operation failed');
       }
 
       await fetchDb(); // Reload DB to reflect updates
+      setSuccessMsg(data?.message || 'Saved successfully!');
+      setTimeout(() => setSuccessMsg(''), 4000);
       return data;
     } catch (err) {
       alert(`Error: ${err.message}`);
@@ -135,6 +158,35 @@ export default function AdminPage() {
     } finally {
       setMutationLoading(false);
     }
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    if (!newAdminPassword || newAdminPassword.trim().length < 4) {
+      alert('Password must be at least 4 characters long.');
+      return;
+    }
+    setPwLoading(true);
+    try {
+      await callAdminApi('changePassword', { newPassword: newAdminPassword.trim() });
+      alert('Password updated successfully! Next time you log in, use your new password.');
+      setShowPasswordModal(false);
+      setNewAdminPassword('');
+    } catch (err) {
+      // Handled by callAdminApi
+    } finally {
+      setPwLoading(false);
+    }
+  };
+
+  const formatSchedule = (dateStr) => {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    if (isNaN(d.getTime())) return dateStr;
+    const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
+    const dayNum = d.getDate();
+    const monthName = d.toLocaleDateString('en-US', { month: 'short' });
+    return `${dayName}, ${dayNum} ${monthName}`;
   };
 
   // --- TEAM HANDLERS ---
@@ -365,10 +417,17 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 md:gap-6">
           <a href="/" className="text-xs font-mono text-neutral-400 hover:text-white transition-colors duration-200">
             View Public Site
           </a>
+          <button 
+            onClick={() => setShowPasswordModal(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 border border-neutral-800 hover:border-neutral-700 font-mono text-[10px] uppercase tracking-widest text-neutral-300 hover:text-white bg-neutral-950/60 rounded transition-all duration-300"
+          >
+            <Key size={12} />
+            Change Password
+          </button>
           <button 
             onClick={handleLogout}
             className="flex items-center gap-1.5 px-3 py-1.5 border border-neutral-800 hover:border-red-900/60 font-mono text-[10px] uppercase tracking-widest text-neutral-400 hover:text-red-500 bg-neutral-950/60 rounded transition-all duration-300"
@@ -380,7 +439,13 @@ export default function AdminPage() {
       </nav>
 
       {/* Main Container */}
-      <main className="max-w-7xl mx-auto px-6 mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <main className="max-w-7xl mx-auto px-6 mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {successMsg && (
+          <div className="lg:col-span-12 p-4 bg-emerald-950/40 border border-emerald-800/80 rounded-lg flex items-center gap-3 text-emerald-300 text-xs font-mono animate-fade-in">
+            <Check size={16} className="text-emerald-400 shrink-0" />
+            <span>{successMsg}</span>
+          </div>
+        )}
         
         {/* Left Side: Forms Column (5 cols) */}
         <div className="lg:col-span-5 space-y-8">
@@ -414,7 +479,7 @@ export default function AdminPage() {
                   <button 
                     onClick={() => {
                       setEditingMatch(null);
-                      setMatchForm({ team1Id: '', team2Id: '', score1: '', score2: '', date: '', time: '', status: 'upcoming', stage: 'Group Stage' });
+                      setMatchForm({ team1Id: '', team2Id: '', score1: '', score2: '', date: '', time: '', status: 'upcoming', stage: 'Group Stage', scorers1: '', scorers2: '' });
                     }} 
                     className="text-[10px] uppercase font-mono text-neutral-500 hover:text-white"
                   >
@@ -469,16 +534,17 @@ export default function AdminPage() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    {/* Time */}
+                    {/* Date */}
                     <div>
                       <label className="block text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-1.5">
-                        Time
+                        Match Date
                       </label>
                       <input
-                        type="time"
-                        value={matchForm.time}
-                        onChange={(e) => setMatchForm({ ...matchForm, time: e.target.value })}
+                        type="date"
+                        value={matchForm.date}
+                        onChange={(e) => setMatchForm({ ...matchForm, date: e.target.value })}
                         className="w-full bg-neutral-900 border border-neutral-850 text-white text-xs px-3 py-2.5 rounded focus:border-white focus:outline-none"
+                        required
                       />
                     </div>
 
@@ -760,7 +826,7 @@ export default function AdminPage() {
                         >
                           <div className="flex flex-col">
                             <span className="font-mono text-[10px] text-neutral-500">{match.stage}</span>
-                            <span className="font-mono text-neutral-300 mt-0.5">{match.time} BST</span>
+                            <span className="font-mono text-neutral-300 mt-0.5">{formatSchedule(match.date) || 'Date TBD'}</span>
                           </div>
 
                           <div className="flex items-center justify-center gap-3 font-semibold text-neutral-200">
@@ -953,6 +1019,61 @@ export default function AdminPage() {
         </div>
 
       </main>
+
+      {/* CHANGE PASSWORD MODAL */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-md bg-neutral-950 border border-neutral-800 rounded-lg p-6 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-neutral-900 pb-3">
+              <div className="flex items-center gap-2">
+                <Key size={16} className="text-[#D4AF37]" />
+                <h3 className="text-sm font-bold uppercase tracking-wider text-white font-mono">
+                  Change Admin Password
+                </h3>
+              </div>
+              <button
+                onClick={() => { setShowPasswordModal(false); setNewAdminPassword(''); }}
+                className="text-neutral-500 hover:text-white p-1 rounded transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <form onSubmit={handleChangePassword} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-1.5">
+                  New Password (min. 4 characters)
+                </label>
+                <input
+                  type="text"
+                  value={newAdminPassword}
+                  onChange={(e) => setNewAdminPassword(e.target.value)}
+                  placeholder="Enter new password..."
+                  className="w-full bg-neutral-900 border border-neutral-800 text-white placeholder-neutral-600 px-3 py-2.5 rounded text-xs focus:border-white focus:outline-none font-mono"
+                  required
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2 border-t border-neutral-900">
+                <button
+                  type="button"
+                  onClick={() => { setShowPasswordModal(false); setNewAdminPassword(''); }}
+                  className="px-4 py-2 text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={pwLoading}
+                  className="px-4 py-2 bg-white text-black text-xs font-mono uppercase tracking-widest font-bold rounded hover:bg-neutral-200 transition-colors disabled:opacity-50"
+                >
+                  {pwLoading ? 'Saving...' : 'Update Password'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

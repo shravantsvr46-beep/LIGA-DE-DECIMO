@@ -108,7 +108,17 @@ export async function POST(req) {
 
       if (match.id) {
         // Update match
-        const idx = db.matches.findIndex(m => m.id === match.id);
+        let idx = db.matches.findIndex(m => m.id === match.id);
+        
+        // Fallback: if not found by exact ID, find by season and team IDs
+        if (idx === -1) {
+          idx = db.matches.findIndex(m => 
+            m.seasonId === match.seasonId && 
+            ((m.team1Id === match.team1Id && m.team2Id === match.team2Id) ||
+             (m.team1Id === match.team2Id && m.team2Id === match.team1Id))
+          );
+        }
+
         if (idx !== -1) {
           db.matches[idx] = {
             ...db.matches[idx],
@@ -123,10 +133,20 @@ export async function POST(req) {
             scorers: match.scorers !== undefined ? match.scorers : (db.matches[idx].scorers || {})
           };
         } else {
-          return new Response(
-            JSON.stringify({ error: 'Match not found.' }),
-            { status: 404, headers: { 'Content-Type': 'application/json' } }
-          );
+          // If still not found, add as match
+          db.matches.push({
+            id: match.id || `m-s4-${Date.now()}`,
+            seasonId: match.seasonId,
+            team1Id: match.team1Id,
+            team2Id: match.team2Id,
+            score1,
+            score2,
+            date: match.date || '2026-09-08',
+            time: match.time || '00:00',
+            status: match.status || 'upcoming',
+            stage: match.stage || 'Group Stage',
+            scorers: match.scorers || {}
+          });
         }
       } else {
         // Create new match
@@ -149,6 +169,23 @@ export async function POST(req) {
       writeDb(db);
       return new Response(
         JSON.stringify({ success: true, message: 'Match saved successfully.' }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (action === 'changePassword') {
+      const { newPassword } = body;
+      if (!newPassword || newPassword.trim().length < 4) {
+        return new Response(
+          JSON.stringify({ error: 'Password must be at least 4 characters.' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+
+      db.adminPassword = newPassword.trim();
+      writeDb(db);
+      return new Response(
+        JSON.stringify({ success: true, message: 'Admin password updated successfully.' }),
         { status: 200, headers: { 'Content-Type': 'application/json' } }
       );
     }
