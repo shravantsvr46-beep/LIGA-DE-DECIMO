@@ -1340,13 +1340,20 @@
       "seasonId": "s-4",
       "team1Id": "t-10",
       "team2Id": "t-12",
-      "score1": 0,
-      "score2": 0,
-      "status": "upcoming",
+      "score1": 1,
+      "score2": 1,
+      "status": "completed",
       "stage": "Group Stage",
       "date": "2026-09-08",
       "time": "16:50",
-      "scorers": {}
+      "scorers": {
+        "t-10": [
+          "NAVEEN"
+        ],
+        "t-12": [
+          "SOURAV"
+        ]
+      }
     },
     {
       "id": "m-s4-2",
