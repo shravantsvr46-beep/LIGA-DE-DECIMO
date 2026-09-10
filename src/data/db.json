@@ -1378,13 +1378,23 @@
       "seasonId": "s-4",
       "team1Id": "t-6",
       "team2Id": "t-2",
-      "score1": 0,
-      "score2": 0,
-      "status": "upcoming",
+      "score1": 2,
+      "score2": 3,
+      "status": "completed",
       "stage": "Group Stage",
       "date": "2026-09-08",
       "time": "17:40",
-      "scorers": {}
+      "scorers": {
+        "t-6": [
+          "PRANAV C",
+          "SAMUEL"
+        ],
+        "t-2": [
+          "JONA",
+          "ROHIT",
+          "ROHIT"
+        ]
+      }
     },
     {
       "id": "m-s4-4",
