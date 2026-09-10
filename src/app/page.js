@@ -444,6 +444,7 @@ export default function HomePage() {
         <div className="space-y-8">
           {db.seasons.map((season) => {
             const isUpcoming = season.status === 'upcoming';
+            const isUnderway = season.status === 'underway' || season.status === 'active';
             const champ = getSeasonChampion(season.id);
             const runnerUp = getSeasonRunnerUp(season.id);
 
@@ -452,13 +453,18 @@ export default function HomePage() {
                 key={season.id}
                 href={`/season/${season.id}`}
                 className={`group relative flex flex-col md:flex-row md:items-center justify-between p-8 bg-neutral-950/40 border ${
-                  isUpcoming 
+                  isUnderway
+                    ? 'border-emerald-800/80 hover:border-emerald-600 bg-emerald-950/10'
+                    : isUpcoming 
                     ? 'border-neutral-800 hover:border-neutral-700 bg-neutral-900/5' 
                     : 'border-neutral-900 hover:border-neutral-800'
                 } rounded-lg transition-all duration-300 cursor-pointer overflow-hidden`}
               >
-                {/* Upcoming Border Highlight */}
-                {isUpcoming && (
+                {/* Underway / Upcoming Border Highlight */}
+                {isUnderway && (
+                  <div className="absolute top-0 left-0 w-1 md:w-auto md:h-full h-1 bg-emerald-500 animate-pulse"></div>
+                )}
+                {isUpcoming && !isUnderway && (
                   <div className="absolute top-0 left-0 w-1 md:w-auto md:h-full h-1 bg-white animate-pulse"></div>
                 )}
 
@@ -471,7 +477,19 @@ export default function HomePage() {
                     {season.name}
                   </h4>
                   
-                  {isUpcoming && (
+                  {isUnderway && (
+                    <div className="mt-3 inline-flex items-center gap-2">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                      </span>
+                      <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">
+                        Tournament Underway
+                      </span>
+                    </div>
+                  )}
+
+                  {isUpcoming && !isUnderway && (
                     <div className="mt-3 inline-flex items-center gap-2">
                       <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
@@ -486,7 +504,14 @@ export default function HomePage() {
 
                 {/* Status / Champ Info */}
                 <div className="flex items-center gap-6">
-                  {isUpcoming ? (
+                  {isUnderway ? (
+                    <div className="flex flex-col md:items-end">
+                      <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">Tournament Underway</span>
+                      <span className="text-sm font-semibold text-white mt-1 flex items-center gap-1.5">
+                        Live Standings & Scores <ArrowRight size={13} className="text-emerald-400 group-hover:translate-x-1 transition-transform" />
+                      </span>
+                    </div>
+                  ) : isUpcoming ? (
                     <div className="flex flex-col md:items-end">
                       <span className="text-xs font-mono uppercase tracking-widest text-neutral-500">Upcoming Tournament</span>
                       <span className="text-sm font-semibold text-white mt-1 flex items-center gap-1.5">

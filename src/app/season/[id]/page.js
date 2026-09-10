@@ -342,8 +342,12 @@ export default function SeasonPage() {
           <div className="flex items-center gap-3 min-w-0">
             <span className="hidden sm:block text-xs font-mono uppercase tracking-widest text-neutral-600">Archive</span>
             <h1 className="text-sm font-bold text-white tracking-tight truncate">{season.name}</h1>
-            <span className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-widest font-mono border ${
-              isUpcoming ? 'bg-white/5 border-white/20 text-white' : 'bg-neutral-900/50 border-neutral-800 text-neutral-500'
+            <span className={`shrink-0 text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-widest font-mono border ${
+              season.status === 'underway' || season.status === 'active'
+                ? 'bg-emerald-950/60 border-emerald-800 text-emerald-400 font-bold'
+                : isUpcoming 
+                ? 'bg-white/5 border-white/20 text-white' 
+                : 'bg-neutral-900/50 border-neutral-800 text-neutral-500'
             }`}>{season.status}</span>
           </div>
           <div className="w-16 shrink-0" />

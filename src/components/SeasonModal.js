@@ -94,7 +94,9 @@ export default function SeasonModal({ season, onClose, db }) {
             <h2 className="text-2xl font-bold tracking-tight text-white mt-1">
               {season.name} 
               <span className={`ml-3 text-xs px-2.5 py-1 rounded-full uppercase tracking-widest font-mono border font-normal ${
-                season.status === 'upcoming' 
+                season.status === 'underway' || season.status === 'active'
+                  ? 'bg-emerald-950/60 border-emerald-800 text-emerald-400 font-bold'
+                  : season.status === 'upcoming' 
                   ? 'bg-white/5 border-white/20 text-white' 
                   : 'bg-neutral-900/50 border-neutral-800 text-neutral-500'
               }`}>
