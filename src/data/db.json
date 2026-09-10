@@ -1530,13 +1530,18 @@
       "seasonId": "s-4",
       "team1Id": "t-3",
       "team2Id": "t-9",
-      "score1": 0,
+      "score1": 1,
       "score2": 0,
-      "status": "upcoming",
+      "status": "completed",
       "stage": "Group Stage",
       "date": "2026-09-10",
       "time": "18:05",
-      "scorers": {}
+      "scorers": {
+        "t-3": [
+          "MATHEW"
+        ],
+        "t-9": []
+      }
     },
     {
       "id": "m-s4-13",
@@ -1564,12 +1569,17 @@
       "team1Id": "t-8",
       "team2Id": "t-10",
       "score1": 0,
-      "score2": 0,
-      "status": "upcoming",
+      "score2": 1,
+      "status": "completed",
       "stage": "Group Stage",
       "date": "2026-09-10",
       "time": "18:55",
-      "scorers": {}
+      "scorers": {
+        "t-8": [],
+        "t-10": [
+          "VIDHU"
+        ]
+      }
     }
   ],
   "adminPassword": "thayoli123"
