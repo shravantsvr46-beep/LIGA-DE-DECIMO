@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { X, Calendar, Trophy, BarChart2 } from 'lucide-react';
 
 export default function SeasonModal({ season, onClose, db }) {
-  const [activeTab, setActiveTab] = useState(season?.status === 'upcoming' ? 'table' : 'fixtures'); // 'fixtures' | 'table' | 'allTime'
+  const [activeTab, setActiveTab] = useState(season?.id === 's-4' || season?.status === 'underway' || season?.status === 'upcoming' ? 'table' : 'fixtures'); // 'fixtures' | 'table' | 'allTime'
 
   const placementsConfig = {
     's-1': [
@@ -57,7 +57,7 @@ export default function SeasonModal({ season, onClose, db }) {
     return a.time.localeCompare(b.time);
   });
 
-  const standings = db.standings[season.id] || [];
+  const standings = db?.standings?.[season.id] || {};
   const allTimeRankings = db.allTimeRankings || [];
 
   // Helper to render team badge
@@ -406,6 +406,8 @@ export default function SeasonModal({ season, onClose, db }) {
                             <th scope="col" className="px-4 py-3 font-normal text-center">W</th>
                             <th scope="col" className="px-4 py-3 font-normal text-center">D</th>
                             <th scope="col" className="px-4 py-3 font-normal text-center">L</th>
+                            <th scope="col" className="hidden sm:table-cell px-3 py-3 font-normal text-center">GF</th>
+                            <th scope="col" className="hidden sm:table-cell px-3 py-3 font-normal text-center">GA</th>
                             <th scope="col" className="px-4 py-3 font-normal text-center">GD</th>
                             <th scope="col" className="px-6 py-3 font-normal text-center w-24">Pts</th>
                           </tr>
@@ -413,7 +415,7 @@ export default function SeasonModal({ season, onClose, db }) {
                         <tbody className="divide-y divide-neutral-900/50">
                           {groupRows.length === 0 ? (
                             <tr>
-                              <td colSpan={8} className="px-6 py-8 text-center text-neutral-500 font-mono text-xs">
+                              <td colSpan={10} className="px-6 py-8 text-center text-neutral-500 font-mono text-xs">
                                 No standings recorded in this group.
                               </td>
                             </tr>
@@ -444,6 +446,8 @@ export default function SeasonModal({ season, onClose, db }) {
                                   <td className="px-4 py-3 text-center font-mono text-neutral-300">{row.won}</td>
                                   <td className="px-4 py-3 text-center font-mono text-neutral-300">{row.drawn}</td>
                                   <td className="px-4 py-3 text-center font-mono text-neutral-300">{row.lost}</td>
+                                  <td className="hidden sm:table-cell px-3 py-3 text-center font-mono text-neutral-400">{row.goalsFor}</td>
+                                  <td className="hidden sm:table-cell px-3 py-3 text-center font-mono text-neutral-400">{row.goalsAgainst}</td>
                                   <td className={`px-4 py-3 text-center font-mono ${
                                     row.goalDifference > 0 
                                       ? 'text-white' 

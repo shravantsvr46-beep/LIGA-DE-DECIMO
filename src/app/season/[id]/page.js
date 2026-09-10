@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Calendar, Trophy, BarChart2 } from 'lucide-react';
+import { calculateStandings, sortStandings } from '@/utils/standings';
 
 function Instagram({ size = 24, className = '' }) {
   return (
@@ -148,7 +149,13 @@ export default function SeasonPage() {
 
   const [db,        setDb]        = useState(cachedSeasonDb);
   const [loading,   setLoading]   = useState(!cachedSeasonDb);
-  const [activeTab, setActiveTab] = useState('fixtures');
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'table' || hash === 'fixtures') return hash;
+    }
+    return seasonId === 's-4' ? 'table' : 'fixtures';
+  });
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
@@ -164,7 +171,7 @@ export default function SeasonPage() {
         if (hash === 'table' || hash === 'fixtures') {
           setActiveTab(hash);
         } else {
-          setActiveTab('fixtures');
+          setActiveTab(seasonId === 's-4' ? 'table' : 'fixtures');
         }
       }
     };
@@ -175,10 +182,10 @@ export default function SeasonPage() {
 
     window.addEventListener('popstate', handlePop);
     return () => window.removeEventListener('popstate', handlePop);
-  }, []);
+  }, [seasonId]);
 
   useEffect(() => {
-    fetch('/api/db')
+    fetch('/api/db', { cache: 'no-store' })
       .then(r => r.json())
       .then(data => {
         cachedSeasonDb = data;
@@ -207,7 +214,42 @@ export default function SeasonPage() {
   );
 
   const teamsMap   = db.teams.reduce((acc, t) => { acc[t.id] = t; return acc; }, {});
-  const standings  = db.standings?.[season.id] || {};
+  
+  // Resilient standings computation (uses db.standings or falls back to live calculation)
+  const standings = useMemo(() => {
+    if (db.standings?.[season.id] && Object.keys(db.standings[season.id]).length > 0) {
+      return db.standings[season.id];
+    }
+    if (!db.matches || !db.teams || !season) return {};
+
+    const calculated = calculateStandings(db.matches, db.teams, season.id, season.staticStandings, season.groups);
+    const groups = {};
+    calculated.forEach(row => {
+      let groupName = 'Group A';
+      if (season.groups) {
+        const foundGroup = Object.entries(season.groups).find(([gName, tIds]) => tIds.includes(row.teamId));
+        if (foundGroup) {
+          groupName = foundGroup[0];
+        }
+      } else {
+        const teamObj = db.teams.find(t => t.id === row.teamId);
+        groupName = teamObj?.group || 'Group A';
+      }
+      
+      if (!groups[groupName]) {
+        groups[groupName] = [];
+      }
+      groups[groupName].push(row);
+    });
+
+    const sortedGroups = {};
+    Object.keys(groups).sort().forEach(groupName => {
+      sortedGroups[groupName] = sortStandings(groups[groupName]);
+    });
+
+    return sortedGroups;
+  }, [db, season]);
+
   const placements = PLACEMENTS[season.id];
   const isUpcoming = season.status === 'upcoming';
   const showTabs   = season.id !== 's-1' && !isUpcoming;
@@ -498,19 +540,26 @@ export default function SeasonPage() {
                     <table className="w-full border-collapse text-left text-sm text-neutral-200">
                       <thead>
                         <tr className="border-b border-neutral-900 bg-neutral-950/80 font-mono text-[10px] uppercase tracking-wider text-neutral-500">
-                          {['Pos','Team','P','W','D','L','GD','Pts'].map(h => (
-                            <th key={h} scope="col" className="px-4 py-3 font-normal text-center first:pl-6 last:pr-6">{h}</th>
-                          ))}
+                          <th scope="col" className="px-4 py-3 font-normal text-center pl-6">Pos</th>
+                          <th scope="col" className="px-4 py-3 font-normal">Team</th>
+                          <th scope="col" className="px-3 py-3 font-normal text-center">P</th>
+                          <th scope="col" className="px-3 py-3 font-normal text-center">W</th>
+                          <th scope="col" className="px-3 py-3 font-normal text-center">D</th>
+                          <th scope="col" className="px-3 py-3 font-normal text-center">L</th>
+                          <th scope="col" className="hidden sm:table-cell px-3 py-3 font-normal text-center">GF</th>
+                          <th scope="col" className="hidden sm:table-cell px-3 py-3 font-normal text-center">GA</th>
+                          <th scope="col" className="px-3 py-3 font-normal text-center">GD</th>
+                          <th scope="col" className="px-4 py-3 font-normal text-center pr-6">Pts</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-neutral-900/50">
                         {groupRows.length === 0
-                          ? <tr><td colSpan={8} className="px-6 py-8 text-center text-neutral-500 font-mono text-xs">No standings recorded.</td></tr>
+                          ? <tr><td colSpan={10} className="px-6 py-8 text-center text-neutral-500 font-mono text-xs">No standings recorded.</td></tr>
                           : groupRows.map((row, idx) => {
                             const team = teamsMap[row.teamId];
                             return (
                               <tr key={row.teamId} className="hover:bg-neutral-900/20 transition-colors">
-                                <td className="px-6 py-3 text-center font-mono font-medium text-neutral-400">
+                                <td className="px-4 py-3 pl-6 text-center font-mono font-medium text-neutral-400">
                                   {idx === 0
                                     ? <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-white text-black font-bold text-xs">1</span>
                                     : idx + 1}
@@ -521,12 +570,14 @@ export default function SeasonPage() {
                                     <span className="truncate max-w-[140px] sm:max-w-none">{row.name}</span>
                                   </div>
                                 </td>
-                                <td className="px-4 py-3 text-center font-mono text-neutral-300">{row.played}</td>
-                                <td className="px-4 py-3 text-center font-mono text-neutral-300">{row.won}</td>
-                                <td className="px-4 py-3 text-center font-mono text-neutral-300">{row.drawn}</td>
-                                <td className="px-4 py-3 text-center font-mono text-neutral-300">{row.lost}</td>
-                                <td className="px-4 py-3 text-center font-mono"><GdCell gd={row.goalDifference} /></td>
-                                <td className="px-6 py-3 text-center font-mono font-bold text-white text-base">{row.points}</td>
+                                <td className="px-3 py-3 text-center font-mono text-neutral-300">{row.played}</td>
+                                <td className="px-3 py-3 text-center font-mono text-neutral-300">{row.won}</td>
+                                <td className="px-3 py-3 text-center font-mono text-neutral-300">{row.drawn}</td>
+                                <td className="px-3 py-3 text-center font-mono text-neutral-300">{row.lost}</td>
+                                <td className="hidden sm:table-cell px-3 py-3 text-center font-mono text-neutral-400">{row.goalsFor}</td>
+                                <td className="hidden sm:table-cell px-3 py-3 text-center font-mono text-neutral-400">{row.goalsAgainst}</td>
+                                <td className="px-3 py-3 text-center font-mono"><GdCell gd={row.goalDifference} /></td>
+                                <td className="px-4 py-3 pr-6 text-center font-mono font-bold text-white text-base">{row.points}</td>
                               </tr>
                             );
                           })
@@ -537,6 +588,17 @@ export default function SeasonPage() {
                 </div>
               );
             })}
+            {season.id === 's-4' && (
+              <div className="p-4 bg-emerald-950/20 border border-emerald-900/60 rounded text-[11px] font-mono text-neutral-400 leading-relaxed space-y-1">
+                <span className="font-bold text-emerald-400 uppercase flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Season 4 Group Stage Underway
+                </span>
+                <p className="text-neutral-400">
+                  Top teams from each group qualify for the Knockout Quarter-Finals. Group standings update live as match results are confirmed.
+                </p>
+              </div>
+            )}
             {rankingsData && (
               <div className="space-y-4 pt-6 border-t border-neutral-900">
                 <h3 className="text-sm font-mono uppercase tracking-widest text-[#D4AF37] font-bold flex items-center gap-1.5">

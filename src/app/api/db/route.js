@@ -1,6 +1,9 @@
 import { calculateStandings, calculateAllTimeRankings, sortStandings } from '@/utils/standings';
 import { getDb } from '@/utils/dbStorage';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   try {
     const db = await getDb();
@@ -53,7 +56,12 @@ export async function GET() {
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
       }
     );
   } catch (error) {

@@ -302,16 +302,13 @@ export default function HomePage() {
           </p>
 
           <div className="mt-8 flex items-center gap-4">
-            <button
-              onClick={() => {
-                const s4 = db.seasons.find(s => s.id === 's-4');
-                if (s4) setSelectedSeason(s4);
-              }}
+            <Link
+              href="/season/s-4#table"
               className="group px-6 py-3 bg-white text-black font-semibold text-xs uppercase tracking-widest rounded hover:bg-neutral-200 transition-all duration-300 flex items-center gap-2"
             >
-              Season 4 Draw
+              Season 4 Standings
               <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
             <a
               href="#seasons"
               className="px-6 py-3 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white font-mono text-xs uppercase tracking-widest rounded bg-neutral-950/40 transition-all duration-300"
@@ -451,7 +448,7 @@ export default function HomePage() {
             return (
               <Link
                 key={season.id}
-                href={`/season/${season.id}`}
+                href={isUnderway ? `/season/${season.id}#table` : `/season/${season.id}`}
                 className={`group relative flex flex-col md:flex-row md:items-center justify-between p-8 bg-neutral-950/40 border ${
                   isUnderway
                     ? 'border-emerald-800/80 hover:border-emerald-600 bg-emerald-950/10'
