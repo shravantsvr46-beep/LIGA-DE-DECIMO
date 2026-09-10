@@ -1494,13 +1494,23 @@
       "seasonId": "s-4",
       "team1Id": "t-6",
       "team2Id": "t-4",
-      "score1": 0,
-      "score2": 0,
-      "status": "upcoming",
+      "score1": 4,
+      "score2": 1,
+      "status": "completed",
       "stage": "Group Stage",
       "date": "2026-09-10",
       "time": "17:15",
-      "scorers": {}
+      "scorers": {
+        "t-6": [
+          "PRANAV C",
+          "PRANAV C",
+          "SAVIO",
+          "SAVIO"
+        ],
+        "t-4": [
+          "ADHITHYAN AS"
+        ]
+      }
     },
     {
       "id": "m-s4-11",
