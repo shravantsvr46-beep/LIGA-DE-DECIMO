@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Calendar, Trophy, BarChart2 } from 'lucide-react';
 import { calculateStandings, sortStandings } from '@/utils/standings';
@@ -145,17 +145,11 @@ let cachedSeasonDb = null;
 export default function SeasonPage() {
   const params   = useParams();
   const router   = useRouter();
-  const seasonId = params.id;
+  const seasonId = params?.id;
 
   const [db,        setDb]        = useState(cachedSeasonDb);
   const [loading,   setLoading]   = useState(!cachedSeasonDb);
-  const [activeTab, setActiveTab] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash.replace('#', '');
-      if (hash === 'table' || hash === 'fixtures') return hash;
-    }
-    return seasonId === 's-4' ? 'table' : 'fixtures';
-  });
+  const [activeTab, setActiveTab] = useState('fixtures');
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
@@ -176,8 +170,13 @@ export default function SeasonPage() {
       }
     };
 
-    if (typeof window !== 'undefined' && window.location.hash) {
-      handlePop();
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'table' || hash === 'fixtures') {
+        setActiveTab(hash);
+      } else if (seasonId === 's-4') {
+        setActiveTab('table');
+      }
     }
 
     window.addEventListener('popstate', handlePop);
@@ -213,42 +212,39 @@ export default function SeasonPage() {
     </div>
   );
 
-  const teamsMap   = db.teams.reduce((acc, t) => { acc[t.id] = t; return acc; }, {});
+  const teamsMap = db.teams.reduce((acc, t) => { acc[t.id] = t; return acc; }, {});
   
   // Resilient standings computation (uses db.standings or falls back to live calculation)
-  const standings = useMemo(() => {
-    if (db.standings?.[season.id] && Object.keys(db.standings[season.id]).length > 0) {
-      return db.standings[season.id];
-    }
-    if (!db.matches || !db.teams || !season) return {};
-
-    const calculated = calculateStandings(db.matches, db.teams, season.id, season.staticStandings, season.groups);
-    const groups = {};
-    calculated.forEach(row => {
-      let groupName = 'Group A';
-      if (season.groups) {
-        const foundGroup = Object.entries(season.groups).find(([gName, tIds]) => tIds.includes(row.teamId));
-        if (foundGroup) {
-          groupName = foundGroup[0];
+  let standings = db.standings?.[season.id] || {};
+  if (!standings || Object.keys(standings).length === 0) {
+    if (db.matches && db.teams) {
+      const calculated = calculateStandings(db.matches, db.teams, season.id, season.staticStandings, season.groups);
+      const groups = {};
+      calculated.forEach(row => {
+        let groupName = 'Group A';
+        if (season.groups) {
+          const foundGroup = Object.entries(season.groups).find(([gName, tIds]) => tIds.includes(row.teamId));
+          if (foundGroup) {
+            groupName = foundGroup[0];
+          }
+        } else {
+          const teamObj = db.teams.find(t => t.id === row.teamId);
+          groupName = teamObj?.group || 'Group A';
         }
-      } else {
-        const teamObj = db.teams.find(t => t.id === row.teamId);
-        groupName = teamObj?.group || 'Group A';
-      }
-      
-      if (!groups[groupName]) {
-        groups[groupName] = [];
-      }
-      groups[groupName].push(row);
-    });
+        
+        if (!groups[groupName]) {
+          groups[groupName] = [];
+        }
+        groups[groupName].push(row);
+      });
 
-    const sortedGroups = {};
-    Object.keys(groups).sort().forEach(groupName => {
-      sortedGroups[groupName] = sortStandings(groups[groupName]);
-    });
-
-    return sortedGroups;
-  }, [db, season]);
+      const sortedGroups = {};
+      Object.keys(groups).sort().forEach(groupName => {
+        sortedGroups[groupName] = sortStandings(groups[groupName]);
+      });
+      standings = sortedGroups;
+    }
+  }
 
   const placements = PLACEMENTS[season.id];
   const isUpcoming = season.status === 'upcoming';
