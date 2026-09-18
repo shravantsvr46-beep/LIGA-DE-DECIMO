@@ -398,14 +398,7 @@ export default function SeasonPage() {
           ) : isLive ? (
             <span className="text-xs font-mono text-red-500 border border-red-950/30 bg-red-950/10 px-2.5 py-0.5 rounded tracking-wider uppercase font-bold">In Progress</span>
           ) : (
-            <>
-              {match.date && (
-                <span className="text-xs font-mono font-medium text-neutral-300">
-                  {formatSchedule(match.date)}
-                </span>
-              )}
-              <span className="text-[10px] font-mono text-neutral-500 border border-neutral-900 px-2 py-0.5 rounded tracking-wider uppercase">Upcoming</span>
-            </>
+            <span className="text-[10px] font-mono text-neutral-500 border border-neutral-900 px-2 py-0.5 rounded tracking-wider uppercase">Upcoming</span>
           )}
         </div>
       </div>

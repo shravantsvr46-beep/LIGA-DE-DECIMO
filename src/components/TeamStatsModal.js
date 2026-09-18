@@ -219,7 +219,7 @@ export default function TeamStatsModal({ team, db, onClose }) {
                     <div key={m.id} className="flex items-center justify-between p-3 bg-neutral-950 border border-neutral-900/60 rounded hover:border-neutral-800 transition-colors">
                       <div className="flex flex-col gap-0.5">
                         <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-wide">
-                          {m.seasonName} &middot; {m.stage}{m.status === 'upcoming' && m.date && ` · ${formatSchedule(m.date)}`}
+                          {m.seasonName} &middot; {m.stage}
                         </span>
                         <div className="flex items-center gap-2">
                           {m.opponent.logo ? (
