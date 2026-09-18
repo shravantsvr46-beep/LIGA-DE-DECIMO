@@ -502,11 +502,23 @@ export default function HomePage() {
                 {/* Status / Champ Info */}
                 <div className="flex items-center gap-6">
                   {isUnderway ? (
-                    <div className="flex flex-col md:items-end">
-                      <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">8 Quarter-Finalists Decided</span>
-                      <span className="text-sm font-semibold text-white mt-1 flex items-center gap-1.5">
-                        Qualified Teams &amp; Standings <ArrowRight size={13} className="text-emerald-400 group-hover:translate-x-1 transition-transform" />
-                      </span>
+                    <div className="flex items-center gap-4 sm:gap-6">
+                      {season.topScorer && (
+                        <div className="hidden sm:flex flex-col md:items-end">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-[#D4AF37] flex items-center gap-1 font-bold">
+                            <Trophy size={10} className="text-[#D4AF37]" /> Top Scorer
+                          </span>
+                          <span className="text-xs font-bold text-white mt-0.5">
+                            {season.topScorer.name} ({season.topScorer.goals}G)
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex flex-col md:items-end">
+                        <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">8 Quarter-Finalists Decided</span>
+                        <span className="text-sm font-semibold text-white mt-1 flex items-center gap-1.5">
+                          Qualified Teams &amp; Standings <ArrowRight size={13} className="text-emerald-400 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </div>
                     </div>
                   ) : isUpcoming ? (
                     <div className="flex flex-col md:items-end">
@@ -516,7 +528,7 @@ export default function HomePage() {
                       </span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-8">
+                    <div className="flex items-center gap-6 sm:gap-8">
                       {/* Champion info */}
                       {champ && (
                         <div className="flex flex-col md:items-end">
@@ -535,6 +547,18 @@ export default function HomePage() {
                           <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">Runner-up</span>
                           <span className="text-sm text-neutral-400 mt-0.5">
                             {runnerUp.name}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Top Scorer */}
+                      {season.topScorer && (
+                        <div className="hidden lg:flex flex-col md:items-end">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 flex items-center gap-1">
+                            <Trophy size={10} className="text-neutral-500" /> Top Scorer
+                          </span>
+                          <span className="text-sm text-neutral-400 mt-0.5">
+                            {season.topScorer.name} ({season.topScorer.goals})
                           </span>
                         </div>
                       )}

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Calendar, Trophy, BarChart2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Trophy, BarChart2, Target } from 'lucide-react';
 import { calculateStandings, sortStandings } from '@/utils/standings';
 
 function Instagram({ size = 24, className = '' }) {
@@ -162,7 +162,7 @@ export default function SeasonPage() {
     const handlePop = () => {
       if (typeof window !== 'undefined') {
         const hash = window.location.hash.replace('#', '');
-        if (hash === 'table' || hash === 'fixtures') {
+        if (hash === 'table' || hash === 'fixtures' || hash === 'scorers') {
           setActiveTab(hash);
         } else {
           setActiveTab(seasonId === 's-4' ? 'table' : 'fixtures');
@@ -172,7 +172,7 @@ export default function SeasonPage() {
 
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.replace('#', '');
-      if (hash === 'table' || hash === 'fixtures') {
+      if (hash === 'table' || hash === 'fixtures' || hash === 'scorers') {
         setActiveTab(hash);
       } else if (seasonId === 's-4') {
         setActiveTab('table');
@@ -262,6 +262,60 @@ export default function SeasonPage() {
   const rankingsNote  = season.id === 's-3'
     ? 'Official positions take precedence (MECH BETA & EC GAMMA shared 3rd — no 3rd-place play-off).'
     : 'Official tournament knockout positions take precedence.';
+
+  const seasonScorers = useMemo(() => {
+    if (!db?.matches) return [];
+    const counts = {};
+    const seasonMatches = db.matches.filter(m => m.seasonId === season.id && m.status === 'completed');
+    seasonMatches.forEach(m => {
+      if (!m.scorers) return;
+      Object.entries(m.scorers).forEach(([teamId, names]) => {
+        if (!Array.isArray(names)) return;
+        names.forEach(name => {
+          const cleanName = (name || '').trim().toUpperCase();
+          if (!cleanName || cleanName === 'OG') return;
+          const key = `${cleanName}__${teamId}`;
+          if (!counts[key]) {
+            counts[key] = {
+              name: cleanName,
+              teamId,
+              team: teamsMap[teamId],
+              goals: 0
+            };
+          }
+          counts[key].goals += 1;
+        });
+      });
+    });
+    return Object.values(counts).sort((a, b) => {
+      if (b.goals !== a.goals) return b.goals - a.goals;
+      return a.name.localeCompare(b.name);
+    });
+  }, [db?.matches, season.id, teamsMap]);
+
+  const topLeader = useMemo(() => {
+    if (season.topScorer) {
+      const team = Object.values(teamsMap).find(
+        t => t.name.toUpperCase() === season.topScorer.teamName.toUpperCase() ||
+             t.shortName.toUpperCase() === season.topScorer.teamName.toUpperCase()
+      );
+      return {
+        name: season.topScorer.name,
+        teamName: season.topScorer.teamName,
+        team,
+        goals: season.topScorer.goals
+      };
+    }
+    if (seasonScorers.length > 0) {
+      return {
+        name: seasonScorers[0].name,
+        teamName: seasonScorers[0].team?.name || seasonScorers[0].teamId,
+        team: seasonScorers[0].team,
+        goals: seasonScorers[0].goals
+      };
+    }
+    return null;
+  }, [season.topScorer, seasonScorers, teamsMap]);
 
   const formatScorers = (list) => {
     if (!list?.length) return '';
@@ -397,6 +451,7 @@ export default function SeasonPage() {
               {[
                 { id: 'fixtures', icon: <Calendar size={13} />, label: 'Fixtures & Results' },
                 { id: 'table',    icon: <Trophy   size={13} />, label: 'Points Table'       },
+                { id: 'scorers',  icon: <Target   size={13} />, label: 'Top Scorers'        },
               ].map(tab => (
                 <button key={tab.id} onClick={() => handleTabChange(tab.id)}
                   className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-mono tracking-wider transition-colors duration-200 border-b-2 ${
@@ -454,8 +509,8 @@ export default function SeasonPage() {
         {/* Fixtures tab */}
         {showTabs && activeTab === 'fixtures' && (
           <section className="space-y-6">
-            {(season.championId || season.topScorer) && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {(season.championId || topLeader) && (
+              <div className={`grid grid-cols-1 ${season.championId && topLeader ? 'sm:grid-cols-2' : ''} gap-4`}>
                 {season.championId && (() => {
                   const champTeam = teamsMap[season.championId];
                   return (
@@ -473,20 +528,22 @@ export default function SeasonPage() {
                     </div>
                   );
                 })()}
-                {season.topScorer && (
+                {topLeader && (
                   <div className="bg-neutral-900/10 border border-neutral-900 p-4 rounded-lg flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded bg-white/5 border border-neutral-800 flex items-center justify-center text-amber-500">
                         <Trophy size={18} className="stroke-[1.5]" />
                       </div>
                       <div>
-                        <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">Season Top Scorer</span>
-                        <h4 className="text-sm font-bold text-white mt-0.5">{season.topScorer.name}</h4>
+                        <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">
+                          {season.id === 's-4' || season.status === 'underway' || season.status === 'active' ? 'Current Top Scorer (Leader)' : 'Season Top Scorer'}
+                        </span>
+                        <h4 className="text-sm font-bold text-white mt-0.5">{topLeader.name}</h4>
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">{season.topScorer.teamName}</span>
-                      <p className="text-sm font-bold text-white mt-0.5">{season.topScorer.goals} Goals</p>
+                      <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">{topLeader.team?.name || topLeader.teamName}</span>
+                      <p className="text-sm font-bold text-white mt-0.5">{topLeader.goals} Goals</p>
                     </div>
                   </div>
                 )}
@@ -720,6 +777,129 @@ export default function SeasonPage() {
                   </ul>
                 </div>
                 <RankingsTable rows={rankingsData} teamsMap={teamsMap} />
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* Top Scorers tab */}
+        {showTabs && activeTab === 'scorers' && (
+          <section className="space-y-8">
+            <div className="bg-neutral-900/10 border border-neutral-900 p-5 sm:p-6 rounded-lg space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-900 pb-4">
+                <div>
+                  <span className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5 font-bold">
+                    <Trophy size={14} className="text-[#D4AF37]" /> Golden Boot &bull; Top Goalscorers
+                  </span>
+                  <h3 className="text-xl font-bold tracking-tight text-white mt-1">
+                    {season.name} Scoring Leaderboard
+                  </h3>
+                </div>
+                {season.id === 's-4' && (
+                  <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-950/60 border border-emerald-800/40 px-3 py-1 rounded font-bold self-start sm:self-auto">
+                    Tournament In Progress
+                  </span>
+                )}
+              </div>
+
+              {/* Leader Highlight Card */}
+              {topLeader && (
+                <div className="relative overflow-hidden bg-gradient-to-r from-yellow-500/10 via-amber-500/5 to-transparent border border-yellow-500/30 rounded-lg p-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center text-black font-black shadow-lg shadow-yellow-500/20 shrink-0">
+                        <Trophy size={24} className="stroke-[2.5]" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-yellow-400 font-bold bg-yellow-500/10 border border-yellow-500/30 px-2 py-0.5 rounded">
+                            {season.id === 's-4' || season.status === 'underway' || season.status === 'active' ? 'Current Golden Boot Leader' : 'Season Top Scorer'}
+                          </span>
+                        </div>
+                        <h4 className="text-2xl font-black text-white tracking-tight mt-1">{topLeader.name}</h4>
+                        <div className="flex items-center gap-2 mt-1">
+                          <TeamBadge team={topLeader.team} size="sm" />
+                          <span className="text-xs font-medium text-neutral-300">{topLeader.team?.name || topLeader.teamName}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex sm:flex-col items-baseline sm:items-end justify-between border-t sm:border-t-0 border-neutral-900 pt-3 sm:pt-0">
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-400">Total Goals</span>
+                      <span className="text-3xl font-black text-[#D4AF37] font-mono mt-0.5">{topLeader.goals} <span className="text-xs uppercase tracking-wider font-normal text-neutral-400">Goals</span></span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Scorers Leaderboard Table */}
+            {seasonScorers.length === 0 ? (
+              <div className="text-center py-16 text-neutral-500 font-mono text-sm border border-neutral-900 rounded-lg bg-neutral-950 px-4">
+                {season.topScorer ? (
+                  <p>Individual match goal logs for {season.name} are archived under official records ({season.topScorer.name} &bull; {season.topScorer.goals} goals).</p>
+                ) : (
+                  <p>No goalscorers recorded yet for this season.</p>
+                )}
+              </div>
+            ) : (
+              <div className="overflow-x-auto border border-neutral-900 rounded-lg bg-neutral-950">
+                <table className="w-full border-collapse text-left text-sm text-neutral-200">
+                  <thead>
+                    <tr className="border-b border-neutral-900 bg-neutral-950/80 font-mono text-[10px] uppercase tracking-wider text-neutral-500">
+                      <th scope="col" className="px-4 py-3 text-center pl-6 w-16">Rank</th>
+                      <th scope="col" className="px-4 py-3">Player</th>
+                      <th scope="col" className="px-4 py-3">Branch / Team</th>
+                      <th scope="col" className="px-4 py-3 text-right pr-6 w-28">Goals</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-900/50">
+                    {seasonScorers.map((scorer, i) => {
+                      const isFirst = i === 0;
+                      return (
+                        <tr key={`${scorer.name}-${scorer.teamId}`} className={`hover:bg-neutral-900/30 transition-colors ${isFirst ? 'bg-yellow-500/[0.03]' : ''}`}>
+                          <td className="px-4 py-3.5 pl-6 text-center">
+                            {isFirst ? (
+                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/40 text-xs font-bold font-mono">
+                                🥇
+                              </span>
+                            ) : i === 1 ? (
+                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-neutral-400/20 text-neutral-300 border border-neutral-400/40 text-xs font-bold font-mono">
+                                🥈
+                              </span>
+                            ) : i === 2 ? (
+                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-700/20 text-amber-500 border border-amber-700/40 text-xs font-bold font-mono">
+                                🥉
+                              </span>
+                            ) : (
+                              <span className="text-neutral-500 font-mono text-xs font-medium">
+                                #{i + 1}
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3.5 font-bold text-white font-mono text-xs tracking-wide">
+                            {scorer.name}
+                          </td>
+                          <td className="px-4 py-3.5">
+                            <div className="flex items-center gap-2">
+                              <TeamBadge team={scorer.team} size="sm" />
+                              <span className="text-xs text-neutral-300">{scorer.team?.name || scorer.teamId}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3.5 pr-6 text-right font-mono">
+                            <span className={`inline-block px-2.5 py-0.5 rounded font-bold text-xs ${
+                              isFirst
+                                ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 font-black'
+                                : 'bg-neutral-900 text-neutral-200 border border-neutral-800'
+                            }`}>
+                              {scorer.goals} {scorer.goals === 1 ? 'Goal' : 'Goals'}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
           </section>

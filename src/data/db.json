@@ -371,6 +371,11 @@
       "id": "s-4",
       "name": "Season 4",
       "status": "underway",
+      "topScorer": {
+        "name": "PRANAV C",
+        "teamName": "CS GAMMA",
+        "goals": 3
+      },
       "groups": {
         "Group A": [
           "t-1",
