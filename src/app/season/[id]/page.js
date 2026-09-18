@@ -319,10 +319,12 @@ export default function SeasonPage() {
 
   const formatScorers = (list) => {
     if (!list?.length) return '';
-    const filtered = list.filter(n => n.toUpperCase() !== 'OG');
-    if (!filtered.length) return '';
     const counts = {};
-    filtered.forEach(n => { counts[n] = (counts[n] || 0) + 1; });
+    list.forEach(n => {
+      const clean = (n || '').trim().toUpperCase();
+      if (!clean) return;
+      counts[clean] = (counts[clean] || 0) + 1;
+    });
     return Object.entries(counts).map(([n, q]) => `${n}${q > 1 ? "'".repeat(q) : "'"}`).join(', ');
   };
 

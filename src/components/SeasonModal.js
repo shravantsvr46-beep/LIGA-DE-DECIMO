@@ -29,11 +29,11 @@ export default function SeasonModal({ season, onClose, db }) {
 
   const formatScorers = (scorerList) => {
     if (!scorerList || scorerList.length === 0) return '';
-    const filteredList = scorerList.filter(name => name.toUpperCase() !== 'OG');
-    if (filteredList.length === 0) return '';
     const counts = {};
-    filteredList.forEach(name => {
-      counts[name] = (counts[name] || 0) + 1;
+    scorerList.forEach(name => {
+      const clean = (name || '').trim().toUpperCase();
+      if (!clean) return;
+      counts[clean] = (counts[clean] || 0) + 1;
     });
     return Object.entries(counts)
       .map(([name, qty]) => `${name}${qty > 1 ? "'".repeat(qty) : "'"}`)
