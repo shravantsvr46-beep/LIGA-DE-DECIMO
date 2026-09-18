@@ -600,16 +600,20 @@ export default function AdminPage() {
                       <label className="block text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-1.5">
                         Stage
                       </label>
-                      <select
+                      <input
+                        type="text"
                         value={matchForm.stage}
                         onChange={(e) => setMatchForm({ ...matchForm, stage: e.target.value })}
-                        className="w-full bg-neutral-900 border border-neutral-850 text-white text-xs px-3 py-2.5 rounded focus:border-white focus:outline-none"
-                      >
-                        <option value="Group Stage">Group Stage</option>
-                        <option value="Quarterfinal">Quarterfinal</option>
-                        <option value="Semifinal">Semifinal</option>
-                        <option value="Final">Final</option>
-                      </select>
+                        placeholder="e.g. Match 1, Quarterfinal, Semifinal, Final"
+                        list="stage-options"
+                        className="w-full bg-neutral-900 border border-neutral-850 text-white text-xs px-3 py-2.5 rounded focus:border-white focus:outline-none font-mono"
+                      />
+                      <datalist id="stage-options">
+                        <option value="Group Stage" />
+                        <option value="Quarterfinal" />
+                        <option value="Semifinal" />
+                        <option value="Final" />
+                      </datalist>
                     </div>
                   </div>
 

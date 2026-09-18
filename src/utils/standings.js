@@ -37,12 +37,21 @@ export function calculateStandings(matches, teams, seasonId = null, staticStandi
     };
   });
 
+  const isGroupMatch = (m) => {
+    if (!m.stage) return true;
+    const s = m.stage.toLowerCase().trim();
+    if (s.includes('quarter') || s.includes('semi') || s.includes('final') || s.includes('playoff') || s.startsWith('qf')) {
+      return false;
+    }
+    return true;
+  };
+
   // If seasonId is specified, only process matches for that season
   // Otherwise, if we are calculating All-Time standings (seasonId = null), 
   // we need to aggregate BOTH matches and static standings from archive seasons.
   const targetMatches = seasonId 
-    ? matches.filter(m => m.seasonId === seasonId && m.status === 'completed' && m.stage === 'Group Stage')
-    : matches.filter(m => m.status === 'completed' && m.stage === 'Group Stage');
+    ? matches.filter(m => m.seasonId === seasonId && m.status === 'completed' && isGroupMatch(m))
+    : matches.filter(m => m.status === 'completed' && isGroupMatch(m));
 
   // Process match results
   targetMatches.forEach(m => {
