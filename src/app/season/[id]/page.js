@@ -552,6 +552,51 @@ export default function SeasonPage() {
                 </div>
               </div>
             )}
+            {season.id === 's-4' && (
+              <div className="bg-neutral-900/10 border border-neutral-900 p-5 rounded-lg space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5 font-bold">
+                    <Trophy size={13} className="text-[#D4AF37]" /> Official Quarter-Final Matchups
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded font-bold">
+                    Knockout Stage
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {[
+                    { qf: 'QF 1', t1: 't-1', t2: 't-6' },
+                    { qf: 'QF 2', t1: 't-11', t2: 't-2' },
+                    { qf: 'QF 3', t1: 't-10', t2: 't-9' },
+                    { qf: 'QF 4', t1: 't-8', t2: 't-3' }
+                  ].map(({ qf, t1, t2 }) => {
+                    const team1 = teamsMap[t1];
+                    const team2 = teamsMap[t2];
+                    return (
+                      <div key={qf} className="flex items-center justify-between p-3.5 bg-neutral-950 border border-neutral-800/80 rounded-lg gap-2">
+                        <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider bg-emerald-950/50 border border-emerald-800/40 px-2 py-1 rounded shrink-0">
+                          {qf}
+                        </span>
+                        <div className="flex items-center gap-2 sm:gap-4 flex-1 justify-center px-1 min-w-0">
+                          <div className="flex items-center gap-2 justify-end flex-1 min-w-0">
+                            <span className="text-xs font-bold text-white truncate text-right">{team1?.shortName || team1?.name}</span>
+                            <TeamBadge team={team1} size="sm" />
+                          </div>
+                          <span className="text-[10px] font-mono text-neutral-400 px-2 py-0.5 bg-neutral-900 rounded border border-neutral-800 shrink-0 font-bold">VS</span>
+                          <div className="flex items-center gap-2 justify-start flex-1 min-w-0">
+                            <TeamBadge team={team2} size="sm" />
+                            <span className="text-xs font-bold text-white truncate text-left">{team2?.shortName || team2?.name}</span>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-mono text-neutral-500 border border-neutral-800 px-2 py-0.5 rounded shrink-0 uppercase tracking-wider">
+                          Upcoming
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             {standings && Object.keys(standings).sort().map(groupName => {
               const groupRows = standings[groupName] || [];
               return (
