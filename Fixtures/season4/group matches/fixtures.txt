@@ -17,3 +17,9 @@ CSBS x IT
 CIVIL x ECB
 AIDS x EEE
 ECA x ECC
+
+Friday - 11/9/26
+AEI x CSA
+EEE x CSB
+CSBS x ECA
+AIDS x MEA

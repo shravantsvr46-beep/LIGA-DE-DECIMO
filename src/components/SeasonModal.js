@@ -362,22 +362,50 @@ export default function SeasonModal({ season, onClose, db }) {
           {season.id !== 's-1' && activeTab === 'table' && (
             <div className="space-y-10">
               
-              {/* Group Toppers Showcase */}
+              {/* Group Toppers / Qualified Quarterfinalists Showcase */}
               {season.status !== 'upcoming' && standings && Object.keys(standings).length > 0 && (
-                <div className="bg-neutral-900/10 border border-neutral-900 p-5 rounded-lg space-y-3 animate-text-reveal-anim">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5 font-bold">
-                    <Trophy size={12} className="text-[#D4AF37]" /> Group Toppers (Leaders)
-                  </span>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2">
+                <div className="bg-neutral-900/10 border border-neutral-900 p-5 rounded-lg space-y-4 animate-text-reveal-anim">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <span className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5 font-bold">
+                      <Trophy size={13} className="text-[#D4AF37]" /> {season.id === 's-4' ? 'Qualified Quarter-Finalists (8 Teams)' : 'Group Toppers (Leaders)'}
+                    </span>
+                    {season.id === 's-4' && (
+                      <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded font-bold">
+                        Group Stage Concluded
+                      </span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     {Object.entries(standings).sort().map(([groupName, rows]) => {
-                      const topper = rows[0];
-                      const team = topper ? teamsMap[topper.teamId] : null;
+                      const first = rows[0];
+                      const second = rows[1];
+                      const team1 = first ? teamsMap[first.teamId] : null;
+                      const team2 = second ? teamsMap[second.teamId] : null;
                       return (
-                        <div key={groupName} className="flex items-center gap-2.5 bg-neutral-950 p-2.5 rounded border border-neutral-900">
-                          {renderTeamBadge(team, 'sm')}
-                          <div className="min-w-0 flex-1">
-                            <span className="text-[9px] font-mono text-neutral-500 uppercase block">{groupName}</span>
-                            <span className="text-xs font-bold text-white block truncate">{team?.name || 'TBD'}</span>
+                        <div key={groupName} className="bg-neutral-950 p-3 rounded-lg border border-neutral-800/80 space-y-2">
+                          <span className="text-[10px] font-mono text-neutral-400 font-bold uppercase tracking-wider block border-b border-neutral-900 pb-1 flex items-center justify-between">
+                            <span>{groupName}</span>
+                            <span className="text-emerald-400 text-[9px]">Top 2 Advance</span>
+                          </span>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span className="w-4 h-4 rounded-full bg-emerald-400 text-black text-[10px] font-bold flex items-center justify-center shrink-0">1</span>
+                                {renderTeamBadge(team1, 'sm')}
+                                <span className="text-xs font-bold text-white truncate">{team1?.shortName || team1?.name}</span>
+                              </div>
+                              <span className="text-[10px] font-mono text-emerald-400 shrink-0 font-bold">{first?.points} pts</span>
+                            </div>
+                            {second && (
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <span className="w-4 h-4 rounded-full bg-neutral-900 border border-emerald-700/80 text-emerald-400 text-[10px] font-bold flex items-center justify-center shrink-0">2</span>
+                                  {renderTeamBadge(team2, 'sm')}
+                                  <span className="text-xs font-medium text-neutral-200 truncate">{team2?.shortName || team2?.name}</span>
+                                </div>
+                                <span className="text-[10px] font-mono text-neutral-400 shrink-0">{second?.points} pts</span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       );
@@ -390,7 +418,7 @@ export default function SeasonModal({ season, onClose, db }) {
                 const groupRows = standings[groupName] || [];
                 
                 return (
-                  <div key={groupName} className="space-y-4">
+                  <div key={groupName} className="space-y-3">
                     <h3 className="text-xs font-mono uppercase tracking-widest text-neutral-450 font-bold border-b border-neutral-900 pb-2 flex items-center justify-between">
                       <span>{groupName} Standings</span>
                       <span className="text-[10px] font-normal text-neutral-500">{groupRows.length} Teams</span>
@@ -422,7 +450,7 @@ export default function SeasonModal({ season, onClose, db }) {
                           ) : (
                             groupRows.map((row, idx) => {
                               const team = teamsMap[row.teamId];
-                              const isLeader = idx === 0;
+                              const isTop2 = season.id === 's-4' && idx < 2;
 
                               return (
                                 <tr 
@@ -430,9 +458,13 @@ export default function SeasonModal({ season, onClose, db }) {
                                   className="hover:bg-neutral-900/20 transition-colors duration-200"
                                 >
                                   <td className="px-6 py-3 text-center font-mono font-medium text-neutral-400">
-                                    {isLeader ? (
-                                      <span className="inline-flex items-center justify-center w-5.5 h-5.5 rounded bg-white text-black font-bold text-xs">
+                                    {idx === 0 ? (
+                                      <span className="inline-flex items-center justify-center w-5.5 h-5.5 rounded bg-emerald-400 text-black font-bold text-xs shadow-sm">
                                         1
+                                      </span>
+                                    ) : idx === 1 && season.id === 's-4' ? (
+                                      <span className="inline-flex items-center justify-center w-5.5 h-5.5 rounded bg-emerald-950 border border-emerald-700/80 text-emerald-400 font-bold text-xs">
+                                        2
                                       </span>
                                     ) : (
                                       idx + 1
@@ -440,7 +472,12 @@ export default function SeasonModal({ season, onClose, db }) {
                                   </td>
                                   <td className="px-6 py-3 font-medium text-white flex items-center gap-3">
                                     {renderTeamBadge(team)}
-                                    <span className="truncate max-w-[140px] sm:max-w-none">{row.name}</span>
+                                    <span className={`truncate max-w-[140px] sm:max-w-none ${season.id === 's-4' && !isTop2 ? 'text-neutral-400' : 'text-white font-semibold'}`}>{row.name}</span>
+                                    {isTop2 && (
+                                      <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-950/80 text-emerald-400 border border-emerald-800/60">
+                                        QF
+                                      </span>
+                                    )}
                                   </td>
                                   <td className="px-4 py-3 text-center font-mono text-neutral-300">{row.played}</td>
                                   <td className="px-4 py-3 text-center font-mono text-neutral-300">{row.won}</td>
@@ -467,9 +504,49 @@ export default function SeasonModal({ season, onClose, db }) {
                         </tbody>
                       </table>
                     </div>
+                    {season.id === 's-4' && (
+                      <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-400 pl-1">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
+                        <span className="text-emerald-400 font-semibold">1st &amp; 2nd Place (QF):</span> Qualified for Quarter-Finals
+                      </div>
+                    )}
                   </div>
                 );
               })}
+
+              {season.id === 's-4' && (
+                <div className="p-5 bg-emerald-950/20 border border-emerald-900/60 rounded-lg text-[11px] font-mono text-neutral-400 leading-relaxed space-y-2">
+                  <span className="font-bold text-emerald-400 uppercase flex items-center gap-2 text-xs">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    Season 4 Group Stage Concluded • Quarter-Finals Next
+                  </span>
+                  <p className="text-neutral-300">
+                    All 18 group stage matches across Groups A, B, C, and D are complete. The top 2 teams from each group have officially punched their tickets to the Knockout Quarter-Finals:
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 text-white font-mono text-[10px]">
+                    <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-800 space-y-1">
+                      <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Group A</span>
+                      <div className="text-neutral-200">1. AI &amp; DS (7 pts)</div>
+                      <div className="text-neutral-300">2. EEE (5 pts)</div>
+                    </div>
+                    <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-800 space-y-1">
+                      <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Group B</span>
+                      <div className="text-neutral-200">1. EC GAMMA (7 pts)</div>
+                      <div className="text-neutral-300">2. EC ALPHA (6 pts)</div>
+                    </div>
+                    <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-800 space-y-1">
+                      <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Group C</span>
+                      <div className="text-neutral-200">1. APPLIED (6 pts)</div>
+                      <div className="text-neutral-300">2. CS GAMMA (3 pts)</div>
+                    </div>
+                    <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-800 space-y-1">
+                      <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Group D</span>
+                      <div className="text-neutral-200">1. CIVIL (4 pts)</div>
+                      <div className="text-neutral-300">2. EC BETA (3 pts)</div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Season 2 Rankings Section */}
               {season.id === 's-2' && (

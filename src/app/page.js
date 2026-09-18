@@ -55,8 +55,8 @@ const HIGHLIGHTS = [
   },
   {
     url: '/photos/6.jpg',
-    title: 'A New Campaign',
-    desc: 'Season 4 kicks off soon with revised lineups and higher stakes.'
+    title: 'Knockouts Await',
+    desc: 'The group stages are officially in the books. 8 top branch squads battle next in the Quarter-Finals.'
   }
 ];
 
@@ -306,7 +306,7 @@ export default function HomePage() {
               href="/season/s-4#table"
               className="group px-6 py-3 bg-white text-black font-semibold text-xs uppercase tracking-widest rounded hover:bg-neutral-200 transition-all duration-300 flex items-center gap-2"
             >
-              Season 4 Standings
+              Season 4 Quarter-Finalists
               <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
@@ -481,7 +481,7 @@ export default function HomePage() {
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                       </span>
                       <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">
-                        Tournament Underway
+                        Group Stage Concluded • Knockouts Next
                       </span>
                     </div>
                   )}
@@ -503,9 +503,9 @@ export default function HomePage() {
                 <div className="flex items-center gap-6">
                   {isUnderway ? (
                     <div className="flex flex-col md:items-end">
-                      <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">Tournament Underway</span>
+                      <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">8 Quarter-Finalists Decided</span>
                       <span className="text-sm font-semibold text-white mt-1 flex items-center gap-1.5">
-                        Live Standings & Scores <ArrowRight size={13} className="text-emerald-400 group-hover:translate-x-1 transition-transform" />
+                        Qualified Teams &amp; Standings <ArrowRight size={13} className="text-emerald-400 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </div>
                   ) : isUpcoming ? (

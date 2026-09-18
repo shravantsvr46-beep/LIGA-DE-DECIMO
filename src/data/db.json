@@ -1501,13 +1501,24 @@
       "seasonId": "s-4",
       "team1Id": "t-13",
       "team2Id": "t-5",
-      "score1": 0,
-      "score2": 0,
-      "status": "upcoming",
+      "score1": 2,
+      "score2": 4,
+      "status": "completed",
       "stage": "Group Stage",
-      "date": "",
-      "time": "",
-      "scorers": {}
+      "date": "2026-09-11",
+      "time": "18:35",
+      "scorers": {
+        "t-13": [
+          "DANIEL SIMONE",
+          "ABHINAND"
+        ],
+        "t-5": [
+          "INDRAJITH",
+          "INDRAJITH",
+          "JOSH",
+          "FAZZ"
+        ]
+      }
     },
     {
       "id": "m-s4-10",
@@ -1537,13 +1548,20 @@
       "seasonId": "s-4",
       "team1Id": "t-7",
       "team2Id": "t-12",
-      "score1": 0,
-      "score2": 0,
-      "status": "upcoming",
+      "score1": 1,
+      "score2": 1,
+      "status": "completed",
       "stage": "Group Stage",
-      "date": "",
-      "time": "",
-      "scorers": {}
+      "date": "2026-09-11",
+      "time": "16:30",
+      "scorers": {
+        "t-7": [
+          "ASWIN"
+        ],
+        "t-12": [
+          "DEON"
+        ]
+      }
     },
     {
       "id": "m-s4-12",
@@ -1599,6 +1617,79 @@
         "t-10": [
           "VIDHU"
         ]
+      }
+    },
+    {
+      "id": "m-s4-15",
+      "seasonId": "s-4",
+      "team1Id": "t-2",
+      "team2Id": "t-4",
+      "score1": 2,
+      "score2": 0,
+      "status": "completed",
+      "stage": "Group Stage",
+      "date": "2026-09-11",
+      "time": "16:55",
+      "scorers": {
+        "t-2": [
+          "CALVIN",
+          "OG"
+        ],
+        "t-4": []
+      }
+    },
+    {
+      "id": "m-s4-16",
+      "seasonId": "s-4",
+      "team1Id": "t-11",
+      "team2Id": "t-5",
+      "score1": 0,
+      "score2": 0,
+      "status": "completed",
+      "stage": "Group Stage",
+      "date": "2026-09-11",
+      "time": "17:20",
+      "scorers": {
+        "t-11": [],
+        "t-5": []
+      }
+    },
+    {
+      "id": "m-s4-17",
+      "seasonId": "s-4",
+      "team1Id": "t-7",
+      "team2Id": "t-8",
+      "score1": 0,
+      "score2": 3,
+      "status": "completed",
+      "stage": "Group Stage",
+      "date": "2026-09-11",
+      "time": "17:45",
+      "scorers": {
+        "t-7": [],
+        "t-8": [
+          "AMAL PRASAD",
+          "CHINMAY",
+          "ALVIN"
+        ]
+      }
+    },
+    {
+      "id": "m-s4-18",
+      "seasonId": "s-4",
+      "team1Id": "t-1",
+      "team2Id": "t-13",
+      "score1": 1,
+      "score2": 0,
+      "status": "completed",
+      "stage": "Group Stage",
+      "date": "2026-09-11",
+      "time": "18:10",
+      "scorers": {
+        "t-1": [
+          "OG"
+        ],
+        "t-13": []
       }
     }
   ],
