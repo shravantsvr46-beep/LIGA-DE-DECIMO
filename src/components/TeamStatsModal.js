@@ -123,10 +123,13 @@ export default function TeamStatsModal({ team, db, onClose }) {
     .sort((a, b) => b.goals - a.goals);
 
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-end sm:items-center justify-center z-50 p-0 sm:p-6 overflow-y-auto">
       {/* Container */}
-      <div className="relative w-full max-w-4xl bg-neutral-950 border border-neutral-900 rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[85vh] animate-in fade-in duration-200">
+      <div className="relative w-full max-w-4xl bg-neutral-950 border border-neutral-900 rounded-t-2xl sm:rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[92vh] sm:max-h-[85vh] animate-slide-up sm:animate-none">
         
+        {/* Mobile Pull Indicator */}
+        <div className="w-12 h-1 bg-neutral-700 rounded-full mx-auto my-2.5 sm:hidden shrink-0" />
+
         {/* Close Button */}
         <button 
           onClick={onClose}

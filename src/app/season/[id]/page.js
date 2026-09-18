@@ -101,7 +101,7 @@ function GdCell({ gd }) {
 
 function RankingsTable({ rows, teamsMap }) {
   return (
-    <div className="overflow-x-auto border border-neutral-900 rounded-lg bg-neutral-950">
+    <div className="overflow-x-auto border border-neutral-900 rounded-lg bg-neutral-950 touch-scroll-x">
       <table className="w-full border-collapse text-left text-sm text-neutral-200">
         <thead>
           <tr className="border-b border-neutral-900 bg-neutral-950/80 font-mono text-[10px] uppercase tracking-wider text-neutral-500">
@@ -142,6 +142,8 @@ function RankingsTable({ rows, teamsMap }) {
 
 let cachedSeasonDb = null;
 
+const TABS = ['fixtures', 'table', 'scorers'];
+
 export default function SeasonPage() {
   const params   = useParams();
   const router   = useRouter();
@@ -150,12 +152,58 @@ export default function SeasonPage() {
   const [db,        setDb]        = useState(cachedSeasonDb);
   const [loading,   setLoading]   = useState(!cachedSeasonDb);
   const [activeTab, setActiveTab] = useState('fixtures');
+  const [slideDir,  setSlideDir]  = useState('right');
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [touchStartY, setTouchStartY] = useState(null);
 
   const handleTabChange = (tabId) => {
+    const currentIndex = TABS.indexOf(activeTab);
+    const newIndex = TABS.indexOf(tabId);
+    if (newIndex !== -1 && currentIndex !== -1) {
+      setSlideDir(newIndex >= currentIndex ? 'right' : 'left');
+    }
     setActiveTab(tabId);
     if (typeof window !== 'undefined') {
       window.history.pushState({ tab: tabId }, '', `#${tabId}`);
     }
+  };
+
+  const handleTouchStart = (e) => {
+    if (!e.targetTouches || e.targetTouches.length === 0) return;
+    setTouchStartX(e.targetTouches[0].clientX);
+    setTouchStartY(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX === null || touchStartY === null) return;
+    if (!e.changedTouches || e.changedTouches.length === 0) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+
+    // Do not intercept if user is scrolling inside a table that is horizontally scrollable
+    const target = e.target;
+    const scrollContainer = target?.closest ? target.closest('.overflow-x-auto') : null;
+    if (scrollContainer && scrollContainer.scrollWidth > scrollContainer.clientWidth + 10) {
+      setTouchStartX(null);
+      setTouchStartY(null);
+      return;
+    }
+
+    const minSwipeDistance = 40;
+    if (Math.abs(diffX) > minSwipeDistance && Math.abs(diffX) > Math.abs(diffY) * 1.3) {
+      const currentIndex = TABS.indexOf(activeTab);
+      if (diffX > 0 && currentIndex < TABS.length - 1) {
+        // Swipe Left -> next tab
+        handleTabChange(TABS[currentIndex + 1]);
+      } else if (diffX < 0 && currentIndex > 0) {
+        // Swipe Right -> previous tab
+        handleTabChange(TABS[currentIndex - 1]);
+      }
+    }
+    setTouchStartX(null);
+    setTouchStartY(null);
   };
 
   useEffect(() => {
@@ -441,7 +489,7 @@ export default function SeasonPage() {
         </div>
 
         {showTabs && (
-          <div className="border-t border-neutral-900 bg-neutral-950/60">
+          <div className="border-t border-neutral-900 bg-neutral-950/80 sticky top-0 z-30 backdrop-blur-md">
             <div className="max-w-5xl mx-auto flex">
               {[
                 { id: 'fixtures', icon: <Calendar size={13} />, label: 'Fixtures & Results' },
@@ -456,12 +504,19 @@ export default function SeasonPage() {
                 </button>
               ))}
             </div>
+            <div className="sm:hidden flex items-center justify-center py-1 bg-black/40 border-t border-neutral-900/50 text-[9px] font-mono text-[#D4AF37] tracking-wider">
+              <span>Swipe left / right to slide between tabs &harr;</span>
+            </div>
           </div>
         )}
       </header>
 
       {/* Page content */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+      <main 
+        className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-10 touch-pan-y"
+        onTouchStart={showTabs ? handleTouchStart : undefined}
+        onTouchEnd={showTabs ? handleTouchEnd : undefined}
+      >
 
         {/* Placements */}
         {placements && (
@@ -503,7 +558,7 @@ export default function SeasonPage() {
 
         {/* Fixtures tab */}
         {showTabs && activeTab === 'fixtures' && (
-          <section className="space-y-6">
+          <section key={`fixtures-${activeTab}`} className={`space-y-6 ${slideDir === 'right' ? 'animate-slide-right' : 'animate-slide-left'}`}>
             {(season.championId || topLeader) && (
               <div className={`grid grid-cols-1 ${season.championId && topLeader ? 'sm:grid-cols-2' : ''} gap-4`}>
                 {season.championId && (() => {
@@ -553,7 +608,7 @@ export default function SeasonPage() {
 
         {/* Points table tab */}
         {showTabs && activeTab === 'table' && (
-          <section className="space-y-10">
+          <section key={`table-${activeTab}`} className={`space-y-10 ${slideDir === 'right' ? 'animate-slide-right' : 'animate-slide-left'}`}>
             {standings && Object.keys(standings).length > 0 && (
               <div className="bg-neutral-900/10 border border-neutral-900 p-5 rounded-lg space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -657,7 +712,7 @@ export default function SeasonPage() {
                     <span>{groupName} Standings</span>
                     <span className="text-[10px] font-normal text-neutral-500">{groupRows.length} Teams</span>
                   </h3>
-                  <div className="overflow-x-auto border border-neutral-900 rounded-lg bg-neutral-950">
+                  <div className="overflow-x-auto border border-neutral-900 rounded-lg bg-neutral-950 touch-scroll-x">
                     <table className="w-full border-collapse text-left text-sm text-neutral-200">
                       <thead>
                         <tr className="border-b border-neutral-900 bg-neutral-950/80 font-mono text-[10px] uppercase tracking-wider text-neutral-500">
@@ -779,7 +834,7 @@ export default function SeasonPage() {
 
         {/* Top Scorers tab */}
         {showTabs && activeTab === 'scorers' && (
-          <section className="space-y-8">
+          <section key={`scorers-${activeTab}`} className={`space-y-8 ${slideDir === 'right' ? 'animate-slide-right' : 'animate-slide-left'}`}>
             <div className="bg-neutral-900/10 border border-neutral-900 p-5 sm:p-6 rounded-lg space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-900 pb-4">
                 <div>
@@ -838,7 +893,7 @@ export default function SeasonPage() {
                 )}
               </div>
             ) : (
-              <div className="overflow-x-auto border border-neutral-900 rounded-lg bg-neutral-950">
+              <div className="overflow-x-auto border border-neutral-900 rounded-lg bg-neutral-950 touch-scroll-x">
                 <table className="w-full border-collapse text-left text-sm text-neutral-200">
                   <thead>
                     <tr className="border-b border-neutral-900 bg-neutral-950/80 font-mono text-[10px] uppercase tracking-wider text-neutral-500">

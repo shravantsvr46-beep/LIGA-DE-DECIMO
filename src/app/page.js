@@ -85,6 +85,41 @@ export default function HomePage() {
     }
   };
 
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [touchStartY, setTouchStartY] = useState(null);
+  const [touchEndX, setTouchEndX] = useState(null);
+  const [touchEndY, setTouchEndY] = useState(null);
+
+  const handleTouchStart = (e) => {
+    setTouchEndX(null);
+    setTouchEndY(null);
+    setTouchStartX(e.targetTouches[0].clientX);
+    setTouchStartY(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+    setTouchEndY(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX === null || touchEndX === null || touchStartY === null || touchEndY === null) return;
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+    const minSwipeDistance = 35;
+    if (Math.abs(diffX) > minSwipeDistance && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) {
+        setCarouselIndex((prev) => (prev + 1) % HIGHLIGHTS.length);
+      } else {
+        setCarouselIndex((prev) => (prev - 1 + HIGHLIGHTS.length) % HIGHLIGHTS.length);
+      }
+    }
+    setTouchStartX(null);
+    setTouchStartY(null);
+    setTouchEndX(null);
+    setTouchEndY(null);
+  };
+
   useEffect(() => {
     const handlePopState = () => {
       if (typeof window !== 'undefined') {
@@ -319,34 +354,48 @@ export default function HomePage() {
         </div>
 
         {/* Highlight Carousel */}
-        <div className="md:col-span-7 relative w-full h-[320px] md:h-[420px] border border-neutral-900 rounded-lg overflow-hidden bg-neutral-950/30">
-          {HIGHLIGHTS.map((item, idx) => (
-            <div
-              key={idx}
-              className={`absolute inset-0 flex flex-col justify-end p-6 md:p-8 transition-opacity duration-1000 ease-in-out ${
-                idx === carouselIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-              }`}
-            >
-              {/* Image */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center filter grayscale contrast-125 brightness-[0.4]"
-                style={{ backgroundImage: `url(${item.url})` }}
-              ></div>
+        <div 
+          className="md:col-span-7 relative w-full h-[320px] md:h-[420px] border border-neutral-900 rounded-lg overflow-hidden bg-neutral-950/30 select-none touch-pan-y"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Sliding Track */}
+          <div 
+            className="flex w-full h-full transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
+          >
+            {HIGHLIGHTS.map((item, idx) => (
+              <div
+                key={idx}
+                className="w-full h-full shrink-0 relative flex flex-col justify-end p-6 md:p-8"
+              >
+                {/* Image */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center filter grayscale contrast-125 brightness-[0.4]"
+                  style={{ backgroundImage: `url(${item.url})` }}
+                ></div>
 
-              {/* Text overlay */}
-              <div className="relative z-20 max-w-md">
-                <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest bg-black/60 px-2.5 py-1 border border-neutral-900 rounded">
-                  Match Highlight
-                </span>
-                <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white mt-3">
-                  {item.title}
-                </h3>
-                <p className="text-xs md:text-sm text-neutral-300 mt-2 leading-relaxed">
-                  {item.desc}
-                </p>
+                {/* Text overlay */}
+                <div className="relative z-20 max-w-md pointer-events-none">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest bg-black/60 px-2.5 py-1 border border-neutral-900 rounded inline-block">
+                      Match Highlight
+                    </span>
+                    <span className="text-[9px] font-mono text-[#D4AF37] uppercase tracking-wider block sm:hidden font-medium">
+                      Swipe to slide &rarr;
+                    </span>
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white mt-1">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs md:text-sm text-neutral-300 mt-2 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           {/* Left Arrow */}
           <button
@@ -354,7 +403,7 @@ export default function HomePage() {
               e.stopPropagation();
               setCarouselIndex((prev) => (prev - 1 + HIGHLIGHTS.length) % HIGHLIGHTS.length);
             }}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/60 border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white hover:bg-black/90 transition-all cursor-pointer"
+            className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-9 md:h-9 rounded-full bg-black/60 border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white hover:bg-black/90 transition-all cursor-pointer shadow-md"
             aria-label="Previous Slide"
           >
             <ChevronLeft size={16} />
@@ -366,21 +415,22 @@ export default function HomePage() {
               e.stopPropagation();
               setCarouselIndex((prev) => (prev + 1) % HIGHLIGHTS.length);
             }}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/60 border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white hover:bg-black/90 transition-all cursor-pointer"
+            className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-9 md:h-9 rounded-full bg-black/60 border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white hover:bg-black/90 transition-all cursor-pointer shadow-md"
             aria-label="Next Slide"
           >
             <ChevronRight size={16} />
           </button>
 
           {/* Dots Indicator */}
-          <div className="absolute bottom-6 right-6 z-20 flex gap-2">
+          <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-20 flex gap-2 items-center bg-black/60 backdrop-blur-sm px-2.5 py-1.5 rounded-full border border-neutral-800/80">
             {HIGHLIGHTS.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => setCarouselIndex(idx)}
-                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                  idx === carouselIndex ? 'w-4 bg-white' : 'bg-neutral-700 hover:bg-neutral-500'
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  idx === carouselIndex ? 'w-5 bg-[#D4AF37]' : 'w-1.5 bg-neutral-600 hover:bg-neutral-400'
                 }`}
+                aria-label={`Go to slide ${idx + 1}`}
               ></button>
             ))}
           </div>

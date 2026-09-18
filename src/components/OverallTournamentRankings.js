@@ -370,7 +370,11 @@ export default function OverallTournamentRankings({ db }) {
       </div>
 
       {/* Rankings Table */}
-      <div className="overflow-x-auto rounded-lg border border-neutral-900 bg-neutral-950">
+      <div className="overflow-x-auto rounded-lg border border-neutral-900 bg-neutral-950 touch-scroll-x">
+        <div className="flex sm:hidden items-center justify-between px-3 py-2 bg-neutral-900/40 border-b border-neutral-900 text-[10px] font-mono text-neutral-400">
+          <span>Rankings Table</span>
+          <span className="text-[#D4AF37] font-medium">Slide horizontally &rarr;</span>
+        </div>
         <table className="w-full border-collapse text-xs min-w-[1250px]">
           <thead>
             <tr className="bg-neutral-950 border-b border-neutral-900">

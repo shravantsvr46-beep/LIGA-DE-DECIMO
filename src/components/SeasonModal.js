@@ -84,8 +84,11 @@ export default function SeasonModal({ season, onClose, db }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 bg-black/80 backdrop-blur-md transition-opacity duration-300">
-      <div className="relative w-full max-w-4xl max-h-[85vh] flex flex-col bg-neutral-950 border border-neutral-800 rounded-lg shadow-2xl overflow-hidden animate-text-reveal-anim">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-md transition-opacity duration-300">
+      <div className="relative w-full max-w-4xl max-h-[92vh] sm:max-h-[85vh] flex flex-col bg-neutral-950 border border-neutral-800 rounded-t-2xl sm:rounded-lg shadow-2xl overflow-hidden animate-slide-up sm:animate-text-reveal-anim">
+        
+        {/* Mobile Pull Indicator */}
+        <div className="w-12 h-1 bg-neutral-700 rounded-full mx-auto my-2.5 sm:hidden shrink-0" />
         
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-neutral-900 bg-neutral-950">
