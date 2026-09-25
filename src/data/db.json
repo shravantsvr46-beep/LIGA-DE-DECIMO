@@ -372,9 +372,9 @@
       "name": "Season 4",
       "status": "underway",
       "topScorer": {
-        "name": "PRANAV C",
-        "teamName": "CS GAMMA",
-        "goals": 3
+        "name": "MATHEW / PRANAV C AJITH",
+        "teamName": "CIVIL / CS GAMMA",
+        "goals": 4
       },
       "groups": {
         "Group A": [
@@ -1391,7 +1391,7 @@
       "time": "17:40",
       "scorers": {
         "t-6": [
-          "PRANAV C",
+          "PRANAV C AJITH",
           "SAMUEL"
         ],
         "t-2": [
@@ -1538,8 +1538,8 @@
       "time": "17:15",
       "scorers": {
         "t-6": [
-          "PRANAV C",
-          "PRANAV C",
+          "PRANAV C AJITH",
+          "PRANAV C AJITH",
           "SAVIO",
           "SAVIO"
         ],
@@ -1703,51 +1703,133 @@
       "team1Id": "t-1",
       "team2Id": "t-6",
       "score1": 0,
-      "score2": 0,
-      "status": "upcoming",
-      "stage": "Quarterfinal",
-      "date": "",
-      "time": "",
-      "scorers": {}
+      "score2": 3,
+      "status": "completed",
+      "stage": "Quarter Final 1",
+      "date": "2026-09-12",
+      "time": "16:30",
+      "scorers": {
+        "t-1": [],
+        "t-6": [
+          "PRANAV C AJITH",
+          "SAVIO",
+          "SAMUEL"
+        ]
+      }
     },
     {
       "id": "m-s4-20",
       "seasonId": "s-4",
       "team1Id": "t-11",
       "team2Id": "t-2",
-      "score1": 0,
+      "score1": 2,
       "score2": 0,
-      "status": "upcoming",
-      "stage": "Quarterfinal",
-      "date": "",
-      "time": "",
-      "scorers": {}
+      "status": "completed",
+      "stage": "Quarter Final 2",
+      "date": "2026-09-12",
+      "time": "17:00",
+      "scorers": {
+        "t-11": [
+          "BALU",
+          "POPPY"
+        ],
+        "t-2": []
+      }
     },
     {
       "id": "m-s4-21",
       "seasonId": "s-4",
-      "team1Id": "t-10",
-      "team2Id": "t-9",
-      "score1": 0,
-      "score2": 0,
-      "status": "upcoming",
-      "stage": "Quarterfinal",
-      "date": "",
-      "time": "",
-      "scorers": {}
+      "team1Id": "t-9",
+      "team2Id": "t-10",
+      "score1": 2,
+      "score2": 1,
+      "status": "completed",
+      "stage": "Quarter Final 4",
+      "date": "2026-09-12",
+      "time": "18:00",
+      "scorers": {
+        "t-9": [
+          "HAFIZ",
+          "DON"
+        ],
+        "t-10": [
+          "VISHAL"
+        ]
+      }
     },
     {
       "id": "m-s4-22",
       "seasonId": "s-4",
-      "team1Id": "t-8",
+      "team1Id": "t-3",
+      "team2Id": "t-8",
+      "score1": 2,
+      "score2": 1,
+      "status": "completed",
+      "stage": "Quarter Final 3",
+      "date": "2026-09-12",
+      "time": "17:30",
+      "scorers": {
+        "t-3": [
+          "MATHEW",
+          "MATHEW"
+        ],
+        "t-8": [
+          "CHINMAY"
+        ]
+      }
+    },
+    {
+      "id": "m-s4-23",
+      "seasonId": "s-4",
+      "team1Id": "t-9",
+      "team2Id": "t-11",
+      "score1": 1,
+      "score2": 0,
+      "status": "completed",
+      "stage": "Semi Final 1",
+      "date": "2026-09-13",
+      "time": "17:00",
+      "scorers": {
+        "t-9": [
+          "ELDHOSE"
+        ],
+        "t-11": []
+      }
+    },
+    {
+      "id": "m-s4-24",
+      "seasonId": "s-4",
+      "team1Id": "t-3",
+      "team2Id": "t-6",
+      "score1": 2,
+      "score2": 0,
+      "status": "completed",
+      "stage": "Semi Final 2",
+      "date": "2026-09-13",
+      "time": "17:45",
+      "scorers": {
+        "t-3": [
+          "MATHEW",
+          "OG"
+        ],
+        "t-6": []
+      }
+    },
+    {
+      "id": "m-s4-25",
+      "seasonId": "s-4",
+      "team1Id": "t-9",
       "team2Id": "t-3",
       "score1": 0,
       "score2": 0,
       "status": "upcoming",
-      "stage": "Quarterfinal",
-      "date": "",
-      "time": "",
-      "scorers": {}
+      "stage": "Grand Final",
+      "date": "2026-09-14",
+      "time": "17:30",
+      "scorers": {
+        "t-9": [],
+        "t-3": []
+      }
     }
   ],
   "adminPassword": "thayoli123"

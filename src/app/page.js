@@ -55,8 +55,8 @@ const HIGHLIGHTS = [
   },
   {
     url: '/photos/6.jpg',
-    title: 'Knockouts Await',
-    desc: 'The group stages are officially in the books. 8 top branch squads battle next in the Quarter-Finals.'
+    title: 'Grand Final Showdown',
+    desc: 'Quarter-finals & semi-finals in the books! EC Beta and Civil collide in the epic Season 4 Grand Final.'
   }
 ];
 
@@ -531,7 +531,7 @@ export default function HomePage() {
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                       </span>
                       <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">
-                        Group Stage Concluded • Knockouts Next
+                        Semi-Finals Concluded • Grand Final Up Next
                       </span>
                     </div>
                   )}

@@ -301,8 +301,10 @@ export default function SeasonPage() {
   const sortedMatches = db.matches
     .filter(m => m.seasonId === season.id)
     .sort((a, b) => {
-      const dd = new Date(a.date) - new Date(b.date);
-      return dd !== 0 ? dd : a.time.localeCompare(b.time);
+      const da = a.date ? new Date(a.date).getTime() : 9999999999999;
+      const dbDate = b.date ? new Date(b.date).getTime() : 9999999999999;
+      const dd = da - dbDate;
+      return dd !== 0 ? dd : (a.time || '').localeCompare(b.time || '');
     });
 
   const rankingsData  = season.id === 's-2' ? S2_RANKINGS : season.id === 's-3' ? S3_RANKINGS : null;
@@ -342,6 +344,26 @@ export default function SeasonPage() {
   }, [db?.matches, season.id, teamsMap]);
 
   const topLeader = useMemo(() => {
+    if (seasonScorers.length > 0) {
+      const maxGoals = seasonScorers[0].goals;
+      const tied = seasonScorers.filter(s => s.goals === maxGoals);
+      if (tied.length > 1) {
+        return {
+          name: tied.map(t => t.name).join(' & '),
+          teamName: tied.map(t => t.team?.shortName || t.team?.name || t.teamId).join(' / '),
+          team: tied[0].team,
+          goals: maxGoals,
+          isJoint: true,
+          jointLeaders: tied
+        };
+      }
+      return {
+        name: seasonScorers[0].name,
+        teamName: seasonScorers[0].team?.name || seasonScorers[0].teamId,
+        team: seasonScorers[0].team,
+        goals: seasonScorers[0].goals
+      };
+    }
     if (season.topScorer) {
       const team = Object.values(teamsMap).find(
         t => t.name.toUpperCase() === season.topScorer.teamName.toUpperCase() ||
@@ -352,14 +374,6 @@ export default function SeasonPage() {
         teamName: season.topScorer.teamName,
         team,
         goals: season.topScorer.goals
-      };
-    }
-    if (seasonScorers.length > 0) {
-      return {
-        name: seasonScorers[0].name,
-        teamName: seasonScorers[0].team?.name || seasonScorers[0].teamId,
-        team: seasonScorers[0].team,
-        goals: seasonScorers[0].goals
       };
     }
     return null;
@@ -483,7 +497,7 @@ export default function SeasonPage() {
                 : isUpcoming 
                 ? 'bg-white/5 border-white/20 text-white' 
                 : 'bg-neutral-900/50 border-neutral-800 text-neutral-500'
-            }`}>{season.id === 's-4' ? 'Knockouts Next' : season.status}</span>
+            }`}>{season.id === 's-4' ? 'Grand Final Next' : season.status}</span>
           </div>
           <div className="w-16 shrink-0" />
         </div>
@@ -660,47 +674,168 @@ export default function SeasonPage() {
               </div>
             )}
             {season.id === 's-4' && (
-              <div className="bg-neutral-900/10 border border-neutral-900 p-5 rounded-lg space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5 font-bold">
-                    <Trophy size={13} className="text-[#D4AF37]" /> Official Quarter-Final Matchups
-                  </span>
-                  <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded font-bold">
-                    Knockout Stage
-                  </span>
+              <div className="space-y-6">
+                {/* Grand Final Card */}
+                <div className="relative overflow-hidden bg-gradient-to-r from-yellow-500/10 via-emerald-500/5 to-yellow-500/10 border-2 border-yellow-500/40 p-6 rounded-xl space-y-4 shadow-xl">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-yellow-500/20 pb-3">
+                    <span className="text-xs font-mono uppercase tracking-widest text-yellow-400 flex items-center gap-2 font-bold">
+                      <Trophy size={16} className="text-yellow-400" /> Season 4 Grand Final Showdown
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-950/80 border border-emerald-700/60 px-2.5 py-1 rounded font-bold">
+                      Championship Match • Upcoming
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-2">
+                    {/* Finalist 1: EC BETA */}
+                    <div className="flex items-center gap-4 flex-1 justify-center md:justify-end">
+                      <div className="text-center md:text-right">
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 block font-semibold">Semi-Final 1 Winner</span>
+                        <h4 className="text-lg sm:text-xl font-black text-white mt-0.5">{teamsMap['t-9']?.name || 'EC BETA'}</h4>
+                      </div>
+                      <TeamBadge team={teamsMap['t-9']} size="md" />
+                    </div>
+
+                    <div className="flex flex-col items-center shrink-0 px-4 py-1.5 bg-neutral-900/80 border border-yellow-500/30 rounded-lg">
+                      <span className="text-xs font-mono font-black text-yellow-400">VS</span>
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-widest mt-0.5">Title Decider</span>
+                    </div>
+
+                    {/* Finalist 2: CIVIL */}
+                    <div className="flex items-center gap-4 flex-1 justify-center md:justify-start">
+                      <TeamBadge team={teamsMap['t-3']} size="md" />
+                      <div className="text-center md:text-left">
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 block font-semibold">Semi-Final 2 Winner</span>
+                        <h4 className="text-lg sm:text-xl font-black text-white mt-0.5">{teamsMap['t-3']?.name || 'CIVIL'}</h4>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {[
-                    { qf: 'QF 1', t1: 't-1', t2: 't-6' },
-                    { qf: 'QF 2', t1: 't-11', t2: 't-2' },
-                    { qf: 'QF 3', t1: 't-10', t2: 't-9' },
-                    { qf: 'QF 4', t1: 't-8', t2: 't-3' }
-                  ].map(({ qf, t1, t2 }) => {
-                    const team1 = teamsMap[t1];
-                    const team2 = teamsMap[t2];
-                    return (
-                      <div key={qf} className="flex items-center justify-between p-3.5 bg-neutral-950 border border-neutral-800/80 rounded-lg gap-2">
-                        <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider bg-emerald-950/50 border border-emerald-800/40 px-2 py-1 rounded shrink-0">
-                          {qf}
-                        </span>
-                        <div className="flex items-center gap-2 sm:gap-4 flex-1 justify-center px-1 min-w-0">
-                          <div className="flex items-center gap-2 justify-end flex-1 min-w-0">
-                            <span className="text-xs font-bold text-white truncate text-right">{team1?.shortName || team1?.name}</span>
-                            <TeamBadge team={team1} size="sm" />
+                {/* Semi-Finals Results */}
+                <div className="bg-neutral-900/10 border border-neutral-900 p-5 rounded-lg space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5 font-bold">
+                      <Trophy size={13} className="text-[#D4AF37]" /> Semi-Finals Results
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded font-bold">
+                      Completed
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {[
+                      {
+                        sf: 'SF 1',
+                        t1: 't-9',
+                        t2: 't-11',
+                        s1: 1,
+                        s2: 0,
+                        scorers1: 'ELDHOSE',
+                        winner: 'EC BETA'
+                      },
+                      {
+                        sf: 'SF 2',
+                        t1: 't-3',
+                        t2: 't-6',
+                        s1: 2,
+                        s2: 0,
+                        scorers1: "MATHEW, OG'",
+                        winner: 'CIVIL'
+                      }
+                    ].map(({ sf, t1, t2, s1, s2, scorers1, winner }) => {
+                      const team1 = teamsMap[t1];
+                      const team2 = teamsMap[t2];
+                      return (
+                        <div key={sf} className="flex flex-col p-3.5 bg-neutral-950 border border-neutral-800/80 rounded-lg gap-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider bg-emerald-950/50 border border-emerald-800/40 px-2 py-0.5 rounded">
+                              {sf}
+                            </span>
+                            <span className="text-[10px] font-mono text-emerald-400 font-bold">
+                              {winner} Advanced to Final
+                            </span>
                           </div>
-                          <span className="text-[10px] font-mono text-neutral-400 px-2 py-0.5 bg-neutral-900 rounded border border-neutral-800 shrink-0 font-bold">VS</span>
-                          <div className="flex items-center gap-2 justify-start flex-1 min-w-0">
-                            <TeamBadge team={team2} size="sm" />
-                            <span className="text-xs font-bold text-white truncate text-left">{team2?.shortName || team2?.name}</span>
+                          <div className="flex items-center justify-between gap-2 pt-1">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <TeamBadge team={team1} size="sm" />
+                              <span className="text-xs font-bold text-white truncate">{team1?.shortName || team1?.name}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 px-3 py-1 bg-neutral-900 border border-neutral-800 rounded font-mono font-bold text-xs text-white">
+                              <span>{s1}</span>
+                              <span className="text-neutral-500">:</span>
+                              <span className="text-neutral-400">{s2}</span>
+                            </div>
+                            <div className="flex items-center gap-2 flex-1 justify-end min-w-0">
+                              <span className="text-xs font-normal text-neutral-400 truncate text-right">{team2?.shortName || team2?.name}</span>
+                              <TeamBadge team={team2} size="sm" />
+                            </div>
                           </div>
+                          {scorers1 && (
+                            <span className="text-[9px] font-mono text-neutral-500 text-left pt-0.5 border-t border-neutral-900">
+                              ⚽ {scorers1}
+                            </span>
+                          )}
                         </div>
-                        <span className="text-[10px] font-mono text-neutral-500 border border-neutral-800 px-2 py-0.5 rounded shrink-0 uppercase tracking-wider">
-                          Upcoming
-                        </span>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Quarter-Finals Results */}
+                <div className="bg-neutral-900/10 border border-neutral-900 p-5 rounded-lg space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5 font-bold">
+                      <Trophy size={13} className="text-[#D4AF37]" /> Quarter-Finals Results
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded font-bold">
+                      Completed
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {[
+                      { qf: 'QF 1', t1: 't-1', t2: 't-6', s1: 0, s2: 3, winner: 't-6', scorers: 'PRANAV C AJITH, SAVIO, SAMUEL' },
+                      { qf: 'QF 2', t1: 't-11', t2: 't-2', s1: 2, s2: 0, winner: 't-11', scorers: 'BALU, POPPY' },
+                      { qf: 'QF 3', t1: 't-3', t2: 't-8', s1: 2, s2: 1, winner: 't-3', scorers: "MATHEW (2) | CHINMAY" },
+                      { qf: 'QF 4', t1: 't-9', t2: 't-10', s1: 2, s2: 1, winner: 't-9', scorers: 'HAFIZ, DON | VISHAL' },
+                    ].map(({ qf, t1, t2, s1, s2, winner, scorers }) => {
+                      const team1 = teamsMap[t1];
+                      const team2 = teamsMap[t2];
+                      const t1Won = winner === t1;
+                      const t2Won = winner === t2;
+                      return (
+                        <div key={qf} className="flex flex-col p-3 bg-neutral-950 border border-neutral-800/80 rounded-lg gap-1.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-wider bg-neutral-900 border border-neutral-800 px-2 py-0.5 rounded">
+                              {qf}
+                            </span>
+                            <span className="text-[10px] font-mono text-emerald-400 font-bold">
+                              {teamsMap[winner]?.shortName} Advanced
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between gap-2 pt-1">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <TeamBadge team={team1} size="sm" />
+                              <span className={`text-xs truncate ${t1Won ? 'font-bold text-white' : 'font-normal text-neutral-400'}`}>{team1?.shortName || team1?.name}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-neutral-900 border border-neutral-800 rounded font-mono font-bold text-xs text-white">
+                              <span className={t1Won ? 'text-white' : 'text-neutral-400'}>{s1}</span>
+                              <span className="text-neutral-500">:</span>
+                              <span className={t2Won ? 'text-white' : 'text-neutral-400'}>{s2}</span>
+                            </div>
+                            <div className="flex items-center gap-2 flex-1 justify-end min-w-0">
+                              <span className={`text-xs truncate text-right ${t2Won ? 'font-bold text-white' : 'font-normal text-neutral-400'}`}>{team2?.shortName || team2?.name}</span>
+                              <TeamBadge team={team2} size="sm" />
+                            </div>
+                          </div>
+                          <span className="text-[9px] font-mono text-neutral-500 truncate pt-0.5 border-t border-neutral-900">
+                            ⚽ {scorers}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}
@@ -784,31 +919,31 @@ export default function SeasonPage() {
               <div className="p-5 bg-emerald-950/20 border border-emerald-900/60 rounded-lg text-[11px] font-mono text-neutral-400 leading-relaxed space-y-2">
                 <span className="font-bold text-emerald-400 uppercase flex items-center gap-2 text-xs">
                   <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  Season 4 Group Stage Concluded • Quarter-Finals Next
+                  Season 4 Knockouts: Semi-Finals Concluded • Grand Final Up Next
                 </span>
                 <p className="text-neutral-300">
-                  All 18 group stage matches across Groups A, B, C, and D are complete. The top 2 teams from each group have officially punched their tickets to the Knockout Quarter-Finals:
+                  After thrilling Quarter-Finals and Semi-Finals, <strong>EC BETA</strong> and <strong>CIVIL</strong> have emerged victorious from their respective sides of the bracket to battle for the championship in the Grand Final!
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 text-white font-mono text-[10px]">
-                  <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-800 space-y-1">
-                    <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Group A</span>
-                    <div className="text-neutral-200">1. AI &amp; DS (7 pts)</div>
-                    <div className="text-neutral-300">2. EEE (5 pts)</div>
+                  <div className="bg-neutral-950/90 p-2.5 rounded border border-emerald-800/60 space-y-1">
+                    <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Grand Finalist</span>
+                    <div className="text-white font-bold">EC BETA</div>
+                    <div className="text-neutral-400">Beat ECC (2-1) &amp; EEE (1-0)</div>
+                  </div>
+                  <div className="bg-neutral-950/90 p-2.5 rounded border border-emerald-800/60 space-y-1">
+                    <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Grand Finalist</span>
+                    <div className="text-white font-bold">CIVIL</div>
+                    <div className="text-neutral-400">Beat ECA (2-1) &amp; CSC (2-0)</div>
                   </div>
                   <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-800 space-y-1">
-                    <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Group B</span>
-                    <div className="text-neutral-200">1. EC GAMMA (7 pts)</div>
-                    <div className="text-neutral-300">2. EC ALPHA (6 pts)</div>
+                    <span className="text-amber-500 font-bold block border-b border-neutral-900 pb-0.5">Semi-Finalists</span>
+                    <div className="text-neutral-300">EEE (Semi-Final 1)</div>
+                    <div className="text-neutral-300">CSC (Semi-Final 2)</div>
                   </div>
                   <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-800 space-y-1">
-                    <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Group C</span>
-                    <div className="text-neutral-200">1. APPLIED (6 pts)</div>
-                    <div className="text-neutral-300">2. CS GAMMA (3 pts)</div>
-                  </div>
-                  <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-800 space-y-1">
-                    <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Group D</span>
-                    <div className="text-neutral-200">1. CIVIL (4 pts)</div>
-                    <div className="text-neutral-300">2. EC BETA (3 pts)</div>
+                    <span className="text-neutral-400 font-bold block border-b border-neutral-900 pb-0.5">QF Exits</span>
+                    <div className="text-neutral-400">AI &amp; DS, AEI</div>
+                    <div className="text-neutral-400">EC ALPHA, EC GAMMA</div>
                   </div>
                 </div>
               </div>
@@ -904,29 +1039,32 @@ export default function SeasonPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-neutral-900/50">
-                    {seasonScorers.map((scorer, i) => {
-                      const isFirst = i === 0;
-                      return (
-                        <tr key={`${scorer.name}-${scorer.teamId}`} className={`hover:bg-neutral-900/30 transition-colors ${isFirst ? 'bg-yellow-500/[0.03]' : ''}`}>
-                          <td className="px-4 py-3.5 pl-6 text-center">
-                            {isFirst ? (
-                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/40 text-xs font-bold font-mono">
-                                🥇
-                              </span>
-                            ) : i === 1 ? (
-                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-neutral-400/20 text-neutral-300 border border-neutral-400/40 text-xs font-bold font-mono">
-                                🥈
-                              </span>
-                            ) : i === 2 ? (
-                              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-700/20 text-amber-500 border border-amber-700/40 text-xs font-bold font-mono">
-                                🥉
-                              </span>
-                            ) : (
-                              <span className="text-neutral-500 font-mono text-xs font-medium">
-                                #{i + 1}
-                              </span>
-                            )}
-                          </td>
+                    {(() => {
+                      const distinctGoals = [...new Set(seasonScorers.map(s => s.goals))];
+                      return seasonScorers.map((scorer, i) => {
+                        const tier = distinctGoals.indexOf(scorer.goals);
+                        const isFirst = tier === 0;
+                        return (
+                          <tr key={`${scorer.name}-${scorer.teamId}`} className={`hover:bg-neutral-900/30 transition-colors ${isFirst ? 'bg-yellow-500/[0.03]' : ''}`}>
+                            <td className="px-4 py-3.5 pl-6 text-center">
+                              {tier === 0 ? (
+                                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/40 text-xs font-bold font-mono">
+                                  🥇
+                                </span>
+                              ) : tier === 1 ? (
+                                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-neutral-400/20 text-neutral-300 border border-neutral-400/40 text-xs font-bold font-mono">
+                                  🥈
+                                </span>
+                              ) : tier === 2 ? (
+                                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-700/20 text-amber-500 border border-amber-700/40 text-xs font-bold font-mono">
+                                  🥉
+                                </span>
+                              ) : (
+                                <span className="text-neutral-500 font-mono text-xs font-medium">
+                                  #{i + 1}
+                                </span>
+                              )}
+                            </td>
                           <td className="px-4 py-3.5 font-bold text-white font-mono text-xs tracking-wide">
                             {scorer.name}
                           </td>
@@ -947,7 +1085,8 @@ export default function SeasonPage() {
                           </td>
                         </tr>
                       );
-                    })}
+                    });
+                  })()}
                   </tbody>
                 </table>
               </div>
