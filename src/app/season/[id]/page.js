@@ -86,6 +86,23 @@ const S3_RANKINGS = [
   { rank:13, teamId:'t-8',  mp:3, w:0, d:0, l:3, gf:1,  ga:10, gd:-9, pts:0,  ppm:0.000 },
 ];
 
+const S4_RANKINGS = [
+  { rank:1,  teamId:'t-9',  mp:5, w:4, d:0, l:1, gf:6,  ga:3,  gd:3,  pts:12, ppm:2.400 },
+  { rank:2,  teamId:'t-3',  mp:5, w:3, d:1, l:1, gf:6,  ga:3,  gd:3,  pts:10, ppm:2.000 },
+  { rank:3,  teamId:'t-11', mp:6, w:3, d:2, l:1, gf:12, ga:4,  gd:8,  pts:11, ppm:1.833 },
+  { rank:4,  teamId:'t-6',  mp:5, w:2, d:0, l:3, gf:9,  ga:12, gd:-3, pts:6,  ppm:1.200 },
+  { rank:5,  teamId:'t-2',  mp:3, w:2, d:0, l:1, gf:5,  ga:4,  gd:1,  pts:6,  ppm:2.000 },
+  { rank:6,  teamId:'t-10', mp:4, w:2, d:1, l:1, gf:6,  ga:4,  gd:2,  pts:7,  ppm:1.750 },
+  { rank:7,  teamId:'t-1',  mp:4, w:2, d:1, l:1, gf:3,  ga:4,  gd:-1, pts:7,  ppm:1.750 },
+  { rank:8,  teamId:'t-8',  mp:4, w:2, d:0, l:2, gf:6,  ga:4,  gd:2,  pts:6,  ppm:1.500 },
+  { rank:9,  teamId:'t-5',  mp:3, w:1, d:1, l:1, gf:4,  ga:3,  gd:1,  pts:4,  ppm:1.333 },
+  { rank:10, teamId:'t-12', mp:3, w:0, d:2, l:1, gf:3,  ga:4,  gd:-1, pts:2,  ppm:0.667 },
+  { rank:11, teamId:'t-14', mp:2, w:0, d:1, l:1, gf:0,  ga:1,  gd:-1, pts:1,  ppm:0.500 },
+  { rank:12, teamId:'t-7',  mp:3, w:0, d:1, l:2, gf:2,  ga:7,  gd:-5, pts:1,  ppm:0.333 },
+  { rank:13, teamId:'t-13', mp:3, w:0, d:0, l:3, gf:4,  ga:8,  gd:-4, pts:0,  ppm:0.000 },
+  { rank:14, teamId:'t-4',  mp:2, w:0, d:0, l:2, gf:1,  ga:6,  gd:-5, pts:0,  ppm:0.000 },
+];
+
 function TeamBadge({ team, size = 'sm' }) {
   const cls = size === 'md' ? 'w-10 h-10 text-sm' : 'w-7 h-7 text-xs';
   if (!team) return null;
@@ -313,10 +330,12 @@ export default function SeasonPage() {
       return dd !== 0 ? dd : (a.time || '').localeCompare(b.time || '');
     });
 
-  const rankingsData  = season.id === 's-2' ? S2_RANKINGS : season.id === 's-3' ? S3_RANKINGS : null;
-  const rankingsLabel = season.id === 's-2' ? 'Season 2 Tournament Rankings' : 'Season 3 Tournament Rankings';
+  const rankingsData  = season.id === 's-2' ? S2_RANKINGS : season.id === 's-3' ? S3_RANKINGS : season.id === 's-4' ? S4_RANKINGS : null;
+  const rankingsLabel = season.id === 's-2' ? 'Season 2 Tournament Rankings' : season.id === 's-3' ? 'Season 3 Tournament Rankings' : 'Season 4 Tournament Rankings';
   const rankingsNote  = season.id === 's-3'
     ? 'Official positions take precedence (MECH BETA & EC GAMMA shared 3rd — no 3rd-place play-off).'
+    : season.id === 's-4'
+    ? 'Official tournament knockout positions take precedence (1st EC BETA, 2nd CIVIL, 3rd EEE, 4th CS GAMMA).'
     : 'Official tournament knockout positions take precedence.';
 
   const seasonScorers = useMemo(() => {

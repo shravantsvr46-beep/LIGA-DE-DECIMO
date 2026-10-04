@@ -21,6 +21,12 @@ const PLACEMENTS = {
     't-3': { rank: 2, label: 'Runner-up' },
     't-10': { rank: 3, label: 'Third Place (Shared)' },
     't-14': { rank: 3, label: 'Third Place (Shared)' }
+  },
+  's-4': {
+    't-9': { rank: 1, label: 'Champion' },
+    't-3': { rank: 2, label: 'Runner-up' },
+    't-11': { rank: 3, label: 'Third Place' },
+    't-6': { rank: 4, label: 'Fourth Place' }
   }
 };
 
@@ -152,9 +158,16 @@ export default function OverallTournamentRankings({ db }) {
         const s1Row = s1.staticStandings?.find(r => r.teamId === t.id);
         if (s1Row && s1Row.played > 0) {
           s.seasons.push('S1');
+          s.mp += s1Row.played || 0;
+          s.w += s1Row.won || 0;
+          s.d += s1Row.drawn || 0;
+          s.l += s1Row.lost || 0;
+          s.gf += s1Row.goalsFor || 0;
+          s.ga += s1Row.goalsAgainst || 0;
+          s.pts += s1Row.points || 0;
         }
       }
-      ['s-2', 's-3'].forEach((sId, idx) => {
+      ['s-2', 's-3', 's-4'].forEach((sId, idx) => {
         const hasMatches = db.matches.some(m => m.seasonId === sId && (m.team1Id === t.id || m.team2Id === t.id));
         if (hasMatches) {
           s.seasons.push(`S${idx + 2}`);
@@ -184,7 +197,7 @@ export default function OverallTournamentRankings({ db }) {
 
     const qfTeamIds = new Set();
     db.matches.forEach(m => {
-      if (m.stage && m.stage.toLowerCase().includes('quarter')) {
+      if (m.stage && (m.stage.toLowerCase().includes('quarter') || m.stage.toLowerCase().includes('qf'))) {
         qfTeamIds.add(m.team1Id);
         qfTeamIds.add(m.team2Id);
       }
@@ -198,7 +211,7 @@ export default function OverallTournamentRankings({ db }) {
       }
     });
 
-    const completedMatches = db.matches.filter(m => ['s-2', 's-3'].includes(m.seasonId) && m.status === 'completed');
+    const completedMatches = db.matches.filter(m => ['s-2', 's-3', 's-4'].includes(m.seasonId) && m.status === 'completed');
 
     completedMatches.forEach(m => {
       const t1 = stats[m.team1Id];
@@ -238,7 +251,7 @@ export default function OverallTournamentRankings({ db }) {
 
     const getTier = (s) => {
       if (s.titles + s.ru + s.third > 0) return 'PODIUM';
-      if (s.bestFinishLabel === 'Quarter-finalist' || s.bestFinishVal === 5) return 'QF';
+      if (s.bestFinishVal <= 5) return 'QF';
       return 'GROUP';
     };
 
@@ -482,7 +495,7 @@ export default function OverallTournamentRankings({ db }) {
 
       {/* Note */}
       <p className="mt-4 text-[10px] text-neutral-500 font-mono text-center leading-relaxed px-4">
-        Official tournament achievements include all completed seasons. Statistical records are calculated only from seasons with complete match data.
+        Official tournament achievements and statistical records incorporate all 4 completed seasons (Season 1 to Season 4).
       </p>
     </section>
   );
