@@ -349,7 +349,9 @@ export default function SeasonPage() {
       const tied = seasonScorers.filter(s => s.goals === maxGoals);
       if (tied.length > 1) {
         return {
-          name: tied.map(t => t.name).join(' & '),
+          name: tied.length === 2 
+            ? tied.map(t => t.name).join(' & ') 
+            : tied.slice(0, -1).map(t => t.name).join(', ') + ' & ' + tied[tied.length - 1].name,
           teamName: tied.map(t => t.team?.shortName || t.team?.name || t.teamId).join(' / '),
           team: tied[0].team,
           goals: maxGoals,
@@ -606,7 +608,7 @@ export default function SeasonPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">{topLeader.team?.name || topLeader.teamName}</span>
+                      <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">{topLeader.isJoint ? topLeader.teamName : (topLeader.team?.name || topLeader.teamName)}</span>
                       <p className="text-sm font-bold text-white mt-0.5">{topLeader.goals} Goals</p>
                     </div>
                   </div>
@@ -708,6 +710,47 @@ export default function SeasonPage() {
                         <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 block font-semibold">Semi-Final 2 Winner</span>
                         <h4 className="text-lg sm:text-xl font-black text-white mt-0.5">{teamsMap['t-3']?.name || 'CIVIL'}</h4>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3rd Place Match Card */}
+                <div className="bg-neutral-900/10 border border-neutral-900 p-5 rounded-lg space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5 font-bold">
+                      <Trophy size={13} className="text-[#D4AF37]" /> 3rd Place Play-off (Losers Final)
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded font-bold">
+                      Completed • EEE Wins 3rd Place
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col p-4 bg-neutral-950 border border-neutral-800/80 rounded-lg gap-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono font-bold text-amber-500 uppercase tracking-wider bg-amber-950/40 border border-amber-800/40 px-2 py-0.5 rounded">
+                        🥉 3rd Place Match
+                      </span>
+                      <span className="text-[10px] font-mono text-emerald-400 font-bold">
+                        EEE 3rd Place &bull; CSC 4th Place
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 pt-1">
+                      <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                        <TeamBadge team={teamsMap['t-11']} size="sm" />
+                        <span className="text-xs font-bold text-white truncate">EEE</span>
+                      </div>
+                      <div className="flex items-center gap-2 px-3.5 py-1 bg-neutral-900 border border-neutral-800 rounded font-mono font-bold text-xs text-white">
+                        <span className="text-emerald-400 font-extrabold text-sm">6</span>
+                        <span className="text-neutral-500">:</span>
+                        <span className="text-neutral-400 text-sm">0</span>
+                      </div>
+                      <div className="flex items-center gap-2.5 flex-1 justify-end min-w-0">
+                        <span className="text-xs font-normal text-neutral-400 truncate text-right">CS GAMMA</span>
+                        <TeamBadge team={teamsMap['t-6']} size="sm" />
+                      </div>
+                    </div>
+                    <div className="text-[10px] font-mono text-neutral-400 text-left pt-1.5 border-t border-neutral-900 leading-relaxed">
+                      ⚽ <strong className="text-neutral-300">EEE Scorers:</strong> Balu (2), Roshan, Paul John, Gautham, Poppy
                     </div>
                   </div>
                 </div>
@@ -919,10 +962,10 @@ export default function SeasonPage() {
               <div className="p-5 bg-emerald-950/20 border border-emerald-900/60 rounded-lg text-[11px] font-mono text-neutral-400 leading-relaxed space-y-2">
                 <span className="font-bold text-emerald-400 uppercase flex items-center gap-2 text-xs">
                   <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  Season 4 Knockouts: Semi-Finals Concluded • Grand Final Up Next
+                  Season 4 Knockouts: 3rd Place Decided • Grand Final Up Next
                 </span>
                 <p className="text-neutral-300">
-                  After thrilling Quarter-Finals and Semi-Finals, <strong>EC BETA</strong> and <strong>CIVIL</strong> have emerged victorious from their respective sides of the bracket to battle for the championship in the Grand Final!
+                  <strong>EEE</strong> stormed to a dominant 6-0 victory in the 3rd Place Play-off to claim the bronze finish! The stage is set for the epic Season 4 Grand Final between <strong>EC BETA</strong> and <strong>CIVIL</strong>!
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 text-white font-mono text-[10px]">
                   <div className="bg-neutral-950/90 p-2.5 rounded border border-emerald-800/60 space-y-1">
@@ -935,15 +978,15 @@ export default function SeasonPage() {
                     <div className="text-white font-bold">CIVIL</div>
                     <div className="text-neutral-400">Beat ECA (2-1) &amp; CSC (2-0)</div>
                   </div>
-                  <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-800 space-y-1">
-                    <span className="text-amber-500 font-bold block border-b border-neutral-900 pb-0.5">Semi-Finalists</span>
-                    <div className="text-neutral-300">EEE (Semi-Final 1)</div>
-                    <div className="text-neutral-300">CSC (Semi-Final 2)</div>
+                  <div className="bg-neutral-950/90 p-2.5 rounded border border-amber-800/60 space-y-1">
+                    <span className="text-amber-500 font-bold block border-b border-neutral-900 pb-0.5">🥉 3rd Place (Winner)</span>
+                    <div className="text-white font-bold">EEE</div>
+                    <div className="text-neutral-400">Beat CSC 6-0 in Play-off</div>
                   </div>
                   <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-800 space-y-1">
-                    <span className="text-neutral-400 font-bold block border-b border-neutral-900 pb-0.5">QF Exits</span>
-                    <div className="text-neutral-400">AI &amp; DS, AEI</div>
-                    <div className="text-neutral-400">EC ALPHA, EC GAMMA</div>
+                    <span className="text-neutral-400 font-bold block border-b border-neutral-900 pb-0.5">4th Place</span>
+                    <div className="text-neutral-300">CS GAMMA (CSC)</div>
+                    <div className="text-neutral-500">Play-off Finalist</div>
                   </div>
                 </div>
               </div>
@@ -1003,8 +1046,18 @@ export default function SeasonPage() {
                         </div>
                         <h4 className="text-2xl font-black text-white tracking-tight mt-1">{topLeader.name}</h4>
                         <div className="flex items-center gap-2 mt-1">
-                          <TeamBadge team={topLeader.team} size="sm" />
-                          <span className="text-xs font-medium text-neutral-300">{topLeader.team?.name || topLeader.teamName}</span>
+                          {topLeader.isJoint && topLeader.jointLeaders ? (
+                            <div className="flex items-center -space-x-1.5">
+                              {topLeader.jointLeaders.map((jl, idx) => (
+                                <TeamBadge key={idx} team={jl.team} size="sm" />
+                              ))}
+                            </div>
+                          ) : (
+                            <TeamBadge team={topLeader.team} size="sm" />
+                          )}
+                          <span className="text-xs font-medium text-neutral-300">
+                            {topLeader.isJoint ? topLeader.teamName : (topLeader.team?.name || topLeader.teamName)}
+                          </span>
                         </div>
                       </div>
                     </div>

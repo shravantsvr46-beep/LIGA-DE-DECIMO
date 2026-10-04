@@ -372,8 +372,8 @@
       "name": "Season 4",
       "status": "underway",
       "topScorer": {
-        "name": "MATHEW / PRANAV C AJITH",
-        "teamName": "CIVIL / CS GAMMA",
+        "name": "BALU / MATHEW / PRANAV C AJITH",
+        "teamName": "EEE / CIVIL / CS GAMMA",
         "goals": 4
       },
       "groups": {
@@ -1817,6 +1817,29 @@
     },
     {
       "id": "m-s4-25",
+      "seasonId": "s-4",
+      "team1Id": "t-11",
+      "team2Id": "t-6",
+      "score1": 6,
+      "score2": 0,
+      "status": "completed",
+      "stage": "3rd Place Match",
+      "date": "2026-09-14",
+      "time": "16:00",
+      "scorers": {
+        "t-11": [
+          "BALU",
+          "BALU",
+          "ROSHAN",
+          "PAUL JOHN",
+          "GAUTHAM",
+          "POPPY"
+        ],
+        "t-6": []
+      }
+    },
+    {
+      "id": "m-s4-26",
       "seasonId": "s-4",
       "team1Id": "t-9",
       "team2Id": "t-3",
