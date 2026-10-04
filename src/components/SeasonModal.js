@@ -24,6 +24,12 @@ export default function SeasonModal({ season, onClose, db }) {
       { pos: '2nd', teamId: 't-3', label: 'Runner-up', color: 'bg-neutral-800 text-neutral-200 border-neutral-700' },
       { pos: '3rd', teamId: 't-10', label: 'Third Place (Shared)', color: 'bg-neutral-900 text-neutral-400 border-neutral-800' },
       { pos: '3rd', teamId: 't-14', label: 'Third Place (Shared)', color: 'bg-neutral-900 text-neutral-400 border-neutral-800' }
+    ],
+    's-4': [
+      { pos: '1st', teamId: 't-9', label: 'Champion', color: 'bg-white text-black font-bold border-white' },
+      { pos: '2nd', teamId: 't-3', label: 'Runner-up', color: 'bg-neutral-800 text-neutral-200 border-neutral-700' },
+      { pos: '3rd', teamId: 't-11', label: 'Third Place', color: 'bg-neutral-900 text-neutral-400 border-neutral-800' },
+      { pos: '4th', teamId: 't-6', label: 'Fourth Place', color: 'bg-neutral-950 text-neutral-500 border-neutral-900' }
     ]
   };
 
@@ -420,37 +426,46 @@ export default function SeasonModal({ season, onClose, db }) {
               {season.id === 's-4' && (
                 <div className="space-y-6 animate-text-reveal-anim">
                   {/* Grand Final Card */}
-                  <div className="relative overflow-hidden bg-gradient-to-r from-yellow-500/10 via-emerald-500/5 to-yellow-500/10 border-2 border-yellow-500/40 p-5 rounded-xl space-y-4 shadow-xl">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-yellow-500/20 pb-3">
+                  <div className="relative overflow-hidden bg-gradient-to-r from-yellow-500/15 via-emerald-500/10 to-yellow-500/15 border-2 border-yellow-500/60 p-5 rounded-xl space-y-4 shadow-xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-yellow-500/30 pb-3">
                       <span className="text-xs font-mono uppercase tracking-widest text-yellow-400 flex items-center gap-2 font-bold">
                         <Trophy size={15} className="text-yellow-400" /> Season 4 Grand Final Showdown
                       </span>
-                      <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-950/80 border border-emerald-700/60 px-2.5 py-1 rounded font-bold">
-                        Championship Match • Upcoming
+                      <span className="text-[10px] font-mono text-yellow-300 uppercase tracking-widest bg-yellow-950/80 border border-yellow-600/60 px-2.5 py-1 rounded font-bold flex items-center gap-1.5">
+                        🏆 Completed &bull; EC BETA Champions
                       </span>
                     </div>
 
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-2">
                       <div className="flex items-center gap-3 flex-1 justify-center md:justify-end">
                         <div className="text-center md:text-right">
-                          <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 block font-semibold">Semi-Final 1 Winner</span>
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-yellow-400 block font-bold">🥇 Season 4 Champion</span>
                           <h4 className="text-base sm:text-lg font-black text-white mt-0.5">{teamsMap['t-9']?.name || 'EC BETA'}</h4>
                         </div>
                         {renderTeamBadge(teamsMap['t-9'], 'md')}
                       </div>
 
-                      <div className="flex flex-col items-center shrink-0 px-3.5 py-1 bg-neutral-900/80 border border-yellow-500/30 rounded-lg">
-                        <span className="text-xs font-mono font-black text-yellow-400">VS</span>
-                        <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-widest mt-0.5">Title Decider</span>
+                      <div className="flex flex-col items-center shrink-0 px-3.5 py-1.5 bg-neutral-900 border border-yellow-500/40 rounded-lg">
+                        <div className="flex items-center gap-2 font-mono font-bold text-lg text-white">
+                          <span className="text-yellow-400 font-extrabold text-xl">2</span>
+                          <span className="text-neutral-500">:</span>
+                          <span className="text-neutral-400 text-lg">1</span>
+                        </div>
+                        <span className="text-[9px] font-mono text-emerald-400 uppercase tracking-widest mt-0.5 font-bold">Full Time</span>
                       </div>
 
                       <div className="flex items-center gap-3 flex-1 justify-center md:justify-start">
                         {renderTeamBadge(teamsMap['t-3'], 'md')}
                         <div className="text-center md:text-left">
-                          <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 block font-semibold">Semi-Final 2 Winner</span>
-                          <h4 className="text-base sm:text-lg font-black text-white mt-0.5">{teamsMap['t-3']?.name || 'CIVIL'}</h4>
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block font-semibold">🥈 Runner-up</span>
+                          <h4 className="text-base sm:text-lg font-bold text-neutral-300 mt-0.5">{teamsMap['t-3']?.name || 'CIVIL'}</h4>
                         </div>
                       </div>
+                    </div>
+
+                    <div className="pt-2.5 border-t border-yellow-500/20 flex flex-col sm:flex-row items-center justify-between gap-1.5 text-[10px] font-mono text-neutral-300">
+                      <span>⚽ <strong className="text-yellow-400">EC BETA Scorers:</strong> Don, Hafiz</span>
+                      <span>⚽ <strong className="text-neutral-400">CIVIL Scorer:</strong> Zayan</span>
                     </div>
                   </div>
 
@@ -711,24 +726,24 @@ export default function SeasonModal({ season, onClose, db }) {
                 <div className="p-5 bg-emerald-950/20 border border-emerald-900/60 rounded-lg text-[11px] font-mono text-neutral-400 leading-relaxed space-y-2">
                   <span className="font-bold text-emerald-400 uppercase flex items-center gap-2 text-xs">
                     <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    Season 4 Knockouts: 3rd Place Decided • Grand Final Up Next
+                    Season 4 Concluded: EC BETA Crowned Champions! 🏆
                   </span>
                   <p className="text-neutral-300">
-                    <strong>EEE</strong> stormed to a dominant 6-0 victory in the 3rd Place Play-off to claim the bronze finish! The stage is set for the epic Season 4 Grand Final between <strong>EC BETA</strong> and <strong>CIVIL</strong>!
+                    <strong>EC BETA</strong> sealed the championship with a sensational 2-1 victory over <strong>CIVIL</strong> in the Grand Final! <strong>EEE</strong> earned 3rd place with a dominant 6-0 win over <strong>CS GAMMA</strong>.
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 text-white font-mono text-[10px]">
-                    <div className="bg-neutral-950/90 p-2.5 rounded border border-emerald-800/60 space-y-1">
-                      <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Grand Finalist</span>
+                    <div className="bg-neutral-950/90 p-2.5 rounded border border-yellow-500/60 space-y-1">
+                      <span className="text-yellow-400 font-bold block border-b border-neutral-900 pb-0.5">🏆 1st (Champion)</span>
                       <div className="text-white font-bold">EC BETA</div>
-                      <div className="text-neutral-400">Beat ECC (2-1) &amp; EEE (1-0)</div>
+                      <div className="text-neutral-400">Beat ECC, EEE &amp; CIVIL</div>
                     </div>
-                    <div className="bg-neutral-950/90 p-2.5 rounded border border-emerald-800/60 space-y-1">
-                      <span className="text-emerald-400 font-bold block border-b border-neutral-900 pb-0.5">Grand Finalist</span>
+                    <div className="bg-neutral-950/90 p-2.5 rounded border border-neutral-700 space-y-1">
+                      <span className="text-neutral-300 font-bold block border-b border-neutral-900 pb-0.5">🥈 2nd (Runner-up)</span>
                       <div className="text-white font-bold">CIVIL</div>
-                      <div className="text-neutral-400">Beat ECA (2-1) &amp; CSC (2-0)</div>
+                      <div className="text-neutral-400">Beat ECA &amp; CSC; Finalist</div>
                     </div>
                     <div className="bg-neutral-950/90 p-2.5 rounded border border-amber-800/60 space-y-1">
-                      <span className="text-amber-500 font-bold block border-b border-neutral-900 pb-0.5">🥉 3rd Place (Winner)</span>
+                      <span className="text-amber-500 font-bold block border-b border-neutral-900 pb-0.5">🥉 3rd Place</span>
                       <div className="text-white font-bold">EEE</div>
                       <div className="text-neutral-400">Beat CSC 6-0 in Play-off</div>
                     </div>

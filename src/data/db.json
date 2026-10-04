@@ -370,7 +370,9 @@
     {
       "id": "s-4",
       "name": "Season 4",
-      "status": "underway",
+      "status": "completed",
+      "championId": "t-9",
+      "runnerUpId": "t-3",
       "topScorer": {
         "name": "BALU / MATHEW / PRANAV C AJITH",
         "teamName": "EEE / CIVIL / CS GAMMA",
@@ -1843,15 +1845,20 @@
       "seasonId": "s-4",
       "team1Id": "t-9",
       "team2Id": "t-3",
-      "score1": 0,
-      "score2": 0,
-      "status": "upcoming",
+      "score1": 2,
+      "score2": 1,
+      "status": "completed",
       "stage": "Grand Final",
       "date": "2026-09-14",
       "time": "17:30",
       "scorers": {
-        "t-9": [],
-        "t-3": []
+        "t-9": [
+          "DON",
+          "HAFIZ"
+        ],
+        "t-3": [
+          "ZAYAN"
+        ]
       }
     }
   ],

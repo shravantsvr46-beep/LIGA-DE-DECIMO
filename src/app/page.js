@@ -55,8 +55,8 @@ const HIGHLIGHTS = [
   },
   {
     url: '/photos/6.jpg',
-    title: 'Grand Final Showdown',
-    desc: 'Quarter-finals & semi-finals in the books! EC Beta and Civil collide in the epic Season 4 Grand Final.'
+    title: 'Season 4 Champions: EC Beta',
+    desc: 'EC Beta triumphs 2-1 over Civil in the Grand Final showdown to capture the coveted Season 4 crown!'
   }
 ];
 
@@ -338,10 +338,10 @@ export default function HomePage() {
 
           <div className="mt-8 flex items-center gap-4">
             <Link
-              href="/season/s-4#table"
+              href="/season/s-4"
               className="group px-6 py-3 bg-white text-black font-semibold text-xs uppercase tracking-widest rounded hover:bg-neutral-200 transition-all duration-300 flex items-center gap-2"
             >
-              Season 4 Quarter-Finalists
+              Season 4 Champions: EC BETA
               <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
